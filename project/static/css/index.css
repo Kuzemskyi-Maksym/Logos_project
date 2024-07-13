@@ -116,6 +116,9 @@ input[type="range"]::-moz-range-thumb {
 }
 
 .card-price {
-  color: #f84147;
+  color: #d2484d;
   font-size: 24px;
 }
+
+/* TODO:   243.5  *  170 new card for no image */
+

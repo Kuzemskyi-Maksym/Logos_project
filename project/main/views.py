@@ -4,7 +4,7 @@ from . import choises
 
 
 def index(request):
-    products = models.Products.objects.all()
+    products = models.Products.objects.all().order_by('id')
 
     context = {
         "title": "Home",

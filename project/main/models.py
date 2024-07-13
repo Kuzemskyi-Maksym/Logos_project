@@ -36,11 +36,20 @@ class Products(models.Model):
     color = models.CharField(choices=choises.COLOR, max_length=100, default=' ')
     is_new = models.BooleanField(default=True)
 
-    # def get_absolute_url(self) -> str:
-    #     return f"/shop/product_detail/{self.id}"
+    def get_absolute_url(self) -> str:
+        return f"/shop/product_detail/{self.id}"
 
     def __str__(self) -> str:
         return self.name
+    
+    def display_id(self):
+        return f'{self.id:05}'
+
+    def sell_price(self):
+        if self.discount:
+            return round(self.price - (self.price * self.discount / 100), 2)
+        return self.price
+
 
     class Meta:
         db_table = "Product"
