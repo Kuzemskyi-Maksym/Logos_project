@@ -36,8 +36,8 @@ class Products(models.Model):
     color = models.CharField(choices=choises.COLOR, max_length=100, default=' ')
     is_new = models.BooleanField(default=True)
 
-    def get_absolute_url(self) -> str:
-        return f"/shop/product_detail/{self.id}"
+    # def get_absolute_url(self) -> str:
+    #     return f"/shop/product_detail/{self.id}"
 
     def __str__(self) -> str:
         return self.name

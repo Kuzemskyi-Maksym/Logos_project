@@ -35,7 +35,7 @@ def about(request):
 
 
 # def product_detail(request):
-def product_detail(request, id=None):
-    instance = get_object_or_404(models.Products, id=id)
+def product_detail(request, product_slug=None):
+    instance = get_object_or_404(models.Products, slug=product_slug)
     context = {"title": instance.name, "object": instance}
     return render(request, "product_detail.html", context)

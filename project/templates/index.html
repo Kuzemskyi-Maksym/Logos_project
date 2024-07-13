@@ -358,7 +358,8 @@
                   <img src="{% static 'images/produc_no_image.png' %}" class="card-img-top" alt=" " style="min-height: 170px;max-height: 170px; border-radius: 10px;" />
                 {% endif %}
                 <div class="card-body">
-                  <h5 class="card-title" data-href="{{ product.get_absolute_url }}" style="font-size: 13px; padding: 2.5px !important; padding-top: 6px !important; margin-right: -15px !important; margin-left: -15px !important; margin-top: -10px !important;
+                  {% comment %} <h5 class="card-title" data-href="{{ product.get_absolute_url }}" style="font-size: 13px; padding: 2.5px !important; padding-top: 6px !important; margin-right: -15px !important; margin-left: -15px !important; margin-top: -10px !important; {% endcomment %}
+                  <h5 class="card-title" data-href="{% url 'main:product_detail' product.slug %}" style="font-size: 13px; padding: 2.5px !important; padding-top: 6px !important; margin-right: -15px !important; margin-left: -15px !important; margin-top: -10px !important;
                    min-height: 25px !important; max-height: 25px !important; height: 25px !important; display: -webkit-box; -webkit-line-clamp: 2;
                     -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; font-weight: bolder !important;">{{ product.name|truncatechars:30 }}</h5>
                   <div class="description" style="cursor: pointer; overflow: hidden; font-size: 12px !important;
