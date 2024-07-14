@@ -1,5 +1,6 @@
 from tabnanny import verbose
 from django.db import models
+from django.forms import model_to_dict
 from multiselectfield import MultiSelectField
 from . import choises
 
@@ -35,9 +36,7 @@ class Products(models.Model):
     additionally = MultiSelectField(choices=choises.ADDITIONALLY, default=' ')
     color = models.CharField(choices=choises.COLOR, max_length=100, default=' ')
     is_new = models.BooleanField(default=True)
-
-    # def get_absolute_url(self) -> str:
-    #     return f"/shop/product_detail/{self.id}"
+    
 
     def __str__(self) -> str:
         return self.name

@@ -106,10 +106,12 @@ var colorItems = document.querySelectorAll(".color-item");
 var viewMoreButtonColor = document.getElementById("viewMoreColor");
 var viewLessButtonColor = document.getElementById("viewLessColor");
 
+var producersBlock = document.getElementById("producerBlock");
+var processorsBlock = document.getElementById("processorBlock");
 // Function to handle view more/less
 function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
-  // Initially hide all items after the first 3
-  for (var i = 3; i < items.length; i++) {
+  // Initially hide all items
+  for (var i = 1000; i < items.length; i++) {
     items[i].style.display = "none";
   }
 
@@ -119,7 +121,7 @@ function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
     event.preventDefault();
 
     // Show all items when view more is clicked
-    for (var i = 3; i < items.length; i++) {
+    for (var i = 0; i < items.length; i++) {
       items[i].style.display = "block";
     }
 
@@ -134,13 +136,15 @@ function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
     event.preventDefault();
 
     // Hide all items after the first 5 when view less is clicked
-    for (var i = 3; i < items.length; i++) {
+    for (var i = 0; i < items.length; i++) {
       items[i].style.display = "none";
     }
 
     // Hide the view less button and show the view more button
     viewLessButton.style.display = "none";
     viewMoreButton.style.display = "block";
+
+    producersBlock.style.height = "auto";
   });
 }
 
@@ -207,4 +211,44 @@ for (const card of productCards) {
     const url = card.querySelector(".card-title").getAttribute("data-href");
     window.location.href = url;
   });
+}
+
+function autofilterProducts_producers() {
+  // Отримайте всі вибрані чекбокси
+  const selectedProducers = document.querySelectorAll(
+    'input[name="producers"]:checked'
+  );
+  const producerValues = Array.from(selectedProducers).map(
+    (checkbox) => checkbox.value
+  );
+
+  // Створіть URL з параметрами фільтра
+  let filterURL = new URL(window.location.href);
+  filterURL.searchParams.delete("producers"); // Спочатку очистіть всі селектори
+  producerValues.forEach((value) =>
+    filterURL.searchParams.append("producers", value)
+  ); // Додавайте кожен вибраний селектор
+
+  // Перенаправте користувача на нову URL-адресу з оновленими параметрами фільтра
+  window.location.href = filterURL.href;
+}
+
+function autofilterProducts_processors() {
+  // Отримайте всі вибрані чекбокси
+  const selectedProcessors = document.querySelectorAll(
+    'input[name="processors"]:checked'
+  );
+  const processorsValues = Array.from(selectedProcessors).map(
+    (checkbox) => checkbox.value
+  );
+
+  // Створіть URL з параметрами фільтра
+  let filterURL = new URL(window.location.href);
+  filterURL.searchParams.delete("processors"); // Спочатку очистіть всі селектори
+  processorsValues.forEach((value) =>
+    filterURL.searchParams.append("processors", value)
+  ); // Додавайте кожен вибраний селектор
+
+  // Перенаправте користувача на нову URL-адресу з оновленими параметрами фільтра
+  window.location.href = filterURL.href;
 }

@@ -208,3 +208,9 @@ for (const card of productCards) {
     window.location.href = url;
   });
 }
+
+const filterButton = document.getElementById('filterProducts');
+    filterButton.addEventListener('click', function() {
+        document.getElementById('filter_form').submit();
+    });
+

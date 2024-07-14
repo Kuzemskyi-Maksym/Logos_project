@@ -3,6 +3,13 @@
   width: 100% !important;
 }
 
+.sidebar-block__toggle-icon {
+  margin-left: auto;
+  transform: rotate(90deg);
+  transition: all .5s ease;
+  fill: var(--link-color);
+}
+
 .filters {
   background-color: rgb(255, 255, 255);
   height: 100%;
