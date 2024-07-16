@@ -50,11 +50,19 @@ var viewLessButtonProcessor = document.getElementById("viewLessProcessor");
 
 // Get all processor core items and the view more/less buttons
 var processorCoreItems = document.querySelectorAll(".processor-core-item");
-var viewMoreButtonProcessorCores = document.getElementById(
-  "viewMoreProcessorCores"
+var screenCoatingItems = document.querySelectorAll(".screen_coating-item");
+var viewMoreButtonProcessorores = document.getElementById(
+  "viewMoreProcessor_cores"
 );
 var viewLessButtonProcessorCores = document.getElementById(
-  "viewLessProcessorCores"
+  "viewLessProcessor_cores"
+);
+
+var viewMoreButtonScreenCoating = document.getElementById(
+  "viewMoreScreen_coatings"
+);
+var viewLessButtonScreenCoating = document.getElementById(
+  "viewLessScreen_coatings"
 );
 
 // Get all screen diagonal items and the view more/less buttons
@@ -108,8 +116,73 @@ var viewLessButtonColor = document.getElementById("viewLessColor");
 
 var producersBlock = document.getElementById("producerBlock");
 var processorsBlock = document.getElementById("processorBlock");
+var processor_coresBlock = document.getElementById("processor_coresBlock");
+var screen_coatingsBlock = document.getElementById("screen_coatingsBlock");
+var screen_diagonalsBlock = document.getElementById("screen_diagonalsBlock");
+var screen_resolutionsBlock = document.getElementById("screen_resolutionsBlock");
+var ramsBlock = document.getElementById("ramsBlock");
+var ssd_scopesBlock = document.getElementById("ssd_scopesBlock");
+var ossBlock = document.getElementById("ossBlock");
+
+
+// Function to handle view more/less with local storage
+// function handleViewMoreLess(items, viewMoreButton, viewLessButton, block) {
+//   // Apply the state from local storage
+//   const storedState = localStorage.getItem(key);
+//   if (storedState === "more") {
+//     // Show all items if the state is 'more'
+//     for (var i = 0; i < items.length; i++) {
+//       items[i].style.display = "block";
+//     }
+//     viewMoreButton.style.display = "none";
+//     viewLessButton.style.display = "block";
+//   } else {
+//     // Hide all items after the first 5 if the state is 'less' or not set
+//     for (var i = 5; i < items.length; i++) {
+//       items[i].style.display = "none";
+//     }
+//     viewMoreButton.style.display = "block";
+//     viewLessButton.style.display = "none";
+//   }
+
+//   // Add click event to view more button
+//   viewMoreButton.addEventListener("click", function (event) {
+//     // Prevent the form from being submitted
+//     event.preventDefault();
+
+//     // Show all items when view more is clicked
+//     for (var i = 0; i < items.length; i++) {
+//       items[i].style.display = "block";
+//     }
+
+//     // Hide the view more button and show the view less button
+//     viewMoreButton.style.display = "none";
+//     viewLessButton.style.display = "block";
+
+//     block.style.height = '180px';
+//   });
+
+
+//   // Add click event to view less button
+//   viewLessButton.addEventListener("click", function (event) {
+//     // Prevent the form from being submitted
+//     event.preventDefault();
+
+//     // Hide all items after the first 5 when view less is clicked
+//     for (var i = 5; i < items.length; i++) {
+//       items[i].style.display = "none";
+//     }
+
+//     // Hide the view less button and show the view more button
+//     viewLessButton.style.display = "none";
+//     viewMoreButton.style.display = "block";
+
+//     block.style.height = '0px';
+//   });
+// }
+
 // Function to handle view more/less
-function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
+function handleViewMoreLess(items, viewMoreButton, viewLessButton, block) {
   // Initially hide all items
   for (var i = 1000; i < items.length; i++) {
     items[i].style.display = "none";
@@ -128,6 +201,8 @@ function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
     // Hide the view more button and show the view less button
     viewMoreButton.style.display = "none";
     viewLessButton.style.display = "block";
+
+    block.style.height = '180px'
   });
 
   // Add click event to view less button
@@ -144,49 +219,96 @@ function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
     viewLessButton.style.display = "none";
     viewMoreButton.style.display = "block";
 
-    producersBlock.style.height = "auto";
+    block.style.height = "0px";
   });
 }
+
+// Function to handle view more/less
+// function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
+//   // Initially hide all items
+//   for (var i = 1000; i < items.length; i++) {
+//     items[i].style.display = "none";
+//   }
+
+//   // Add click event to view more button
+//   viewMoreButton.addEventListener("click", function (event) {
+//     // Prevent the form from being submitted
+//     event.preventDefault();
+
+//     // Show all items when view more is clicked
+//     for (var i = 0; i < items.length; i++) {
+//       items[i].style.display = "block";
+//     }
+
+//     // Hide the view more button and show the view less button
+//     viewMoreButton.style.display = "none";
+//     viewLessButton.style.display = "block";
+//   });
+
+//   // Add click event to view less button
+//   viewLessButton.addEventListener("click", function (event) {
+//     // Prevent the form from being submitted
+//     event.preventDefault();
+
+//     // Hide all items after the first 5 when view less is clicked
+//     for (var i = 0; i < items.length; i++) {
+//       items[i].style.display = "none";
+//     }
+
+//     // Hide the view less button and show the view more button
+//     viewLessButton.style.display = "none";
+//     viewMoreButton.style.display = "block";
+
+//     producersBlock.style.height = "auto";
+//   });
+// }
 
 // Call the function for producer, processor, processor cores, screen diagonal, screen resolution, RAM, OS, Additionally, and Color
 handleViewMoreLess(
   producerItems,
   viewMoreButtonProducer,
-  viewLessButtonProducer
+  viewLessButtonProducer,
+  producersBlock,
 );
+
 handleViewMoreLess(
   processorItems,
   viewMoreButtonProcessor,
-  viewLessButtonProcessor
+  viewLessButtonProcessor,
+  processorsBlock,
 );
 handleViewMoreLess(
   processorCoreItems,
-  viewMoreButtonProcessorCores,
-  viewLessButtonProcessorCores
+  viewMoreButtonProcessorores,
+  viewLessButtonProcessorCores,
+  processor_coresBlock,
+);
+handleViewMoreLess(
+  screenCoatingItems,
+  viewMoreButtonScreenCoating,
+  viewLessButtonScreenCoating,
+  screen_coatingsBlock,
 );
 handleViewMoreLess(
   screenDiagonalItems,
   viewMoreButtonScreenDiagonal,
-  viewLessButtonScreenDiagonal
+  viewLessButtonScreenDiagonal,
+  screen_diagonalsBlock,
 );
 handleViewMoreLess(
   screenResolutionItems,
   viewMoreButtonScreenResolution,
-  viewLessButtonScreenResolution
+  viewLessButtonScreenResolution,
+  screen_resolutionsBlock,
 );
-handleViewMoreLess(ramItems, viewMoreButtonRam, viewLessButtonRam);
+handleViewMoreLess(ramItems, viewMoreButtonRam, viewLessButtonRam, ramsBlock);
 handleViewMoreLess(
   ssdScopeItems,
   viewMoreButtonSsdScope,
-  viewLessButtonSsdScope
+  viewLessButtonSsdScope,
+  ssd_scopesBlock
 );
-handleViewMoreLess(osItems, viewMoreButtonOs, viewLessButtonOs);
-handleViewMoreLess(
-  additionallyItems,
-  viewMoreButtonAdditionally,
-  viewLessButtonAdditionally
-);
-handleViewMoreLess(colorItems, viewMoreButtonColor, viewLessButtonColor);
+handleViewMoreLess(osItems, viewMoreButtonOs, viewLessButtonOs, ossBlock);
 
 // Get the clear all button
 var clearAllButton = document.getElementById("clearAll");
@@ -213,42 +335,50 @@ for (const card of productCards) {
   });
 }
 
-function autofilterProducts_producers() {
-  // Отримайте всі вибрані чекбокси
-  const selectedProducers = document.querySelectorAll(
-    'input[name="producers"]:checked'
-  );
-  const producerValues = Array.from(selectedProducers).map(
-    (checkbox) => checkbox.value
-  );
+// Збереження позиції прокрутки у локальному сховищі перед зміною фільтра
+function saveScrollPosition() {
+  localStorage.setItem('scrollPosition', window.scrollY);
+}
 
-  // Створіть URL з параметрами фільтра
+function autofilterProducts(filterName) {
+  saveScrollPosition();
+  const selectedFilters = document.querySelectorAll(`input[name="${filterName}"]:checked`);
+  const filterValues = Array.from(selectedFilters).map(checkbox => checkbox.value);
+
   let filterURL = new URL(window.location.href);
-  filterURL.searchParams.delete("producers"); // Спочатку очистіть всі селектори
-  producerValues.forEach((value) =>
-    filterURL.searchParams.append("producers", value)
-  ); // Додавайте кожен вибраний селектор
+  filterURL.searchParams.delete(filterName);
+  filterValues.forEach(value => filterURL.searchParams.append(filterName, value));
 
-  // Перенаправте користувача на нову URL-адресу з оновленими параметрами фільтра
   window.location.href = filterURL.href;
+}
+
+// Використання функції
+function autofilterProducts_producers() {
+  autofilterProducts("producers");
 }
 
 function autofilterProducts_processors() {
-  // Отримайте всі вибрані чекбокси
-  const selectedProcessors = document.querySelectorAll(
-    'input[name="processors"]:checked'
-  );
-  const processorsValues = Array.from(selectedProcessors).map(
-    (checkbox) => checkbox.value
-  );
-
-  // Створіть URL з параметрами фільтра
-  let filterURL = new URL(window.location.href);
-  filterURL.searchParams.delete("processors"); // Спочатку очистіть всі селектори
-  processorsValues.forEach((value) =>
-    filterURL.searchParams.append("processors", value)
-  ); // Додавайте кожен вибраний селектор
-
-  // Перенаправте користувача на нову URL-адресу з оновленими параметрами фільтра
-  window.location.href = filterURL.href;
+  autofilterProducts("processors");
 }
+function autofilterProducts_processorCores() {
+  autofilterProducts("processor_cores");
+}
+function autofilterProducts_ScreenCoatings() {
+  autofilterProducts("screen_coatings");
+}
+function autofilterProducts_screenDiagonals() {
+  autofilterProducts("screen_diagonals");
+}
+function autofilterProducts_screenResolutions() {
+  autofilterProducts("screen_resolutions");
+}
+function autofilterProducts_rams() {
+  autofilterProducts("rams");
+}
+function autofilterProducts_ssd_scopes() {
+  autofilterProducts("ssd_scopes");
+}
+function autofilterProducts_oss() {
+  autofilterProducts("oss");
+}
+
