@@ -129,7 +129,7 @@
     <div class="col-3 ml-auto text-right order-2"></div>
 
     <div class="col-9 order-1 text-left mr-auto">
-      <span class="d-inline-block d-lg-block"><a href="#" class="text-light site-menu-toggle js-menu-toggle py-5"><span class="icon-menu h3 text-light"></span></a></span>
+      <span class="d-inline-block d-lg-block"><a href="#" class="text-light site-menu-toggle js-menu-toggle "><span class="icon-menu h3 text-light"></span></a></span>
 
       <nav class="site-navigation text-right ml-auto d-none d-lg-none" role="navigation"></nav>
     </div>
@@ -137,8 +137,8 @@
   <a class="navbar-brand" href="{% url 'main:home' %}"><img src="{% static 'images/logo.png' %}" alt="" class="d-inline-block align-text-top logo_photo" style="margin-left: 20px;" /></a>
 
   {% if user.is_authenticated %}
-    <form class="d-flex mx-auto me-2" id="search_form">
-      <input class="input_form_search_registered form-control me-2" type="search" placeholder="Search for..." aria-label="Пошук" />
+    <form class="d-flex mx-auto me-2" id="search_form" action="{% url "main:search" %}" method="get">
+      <input name="q" class="input_form_search_registered form-control me-2" type="search" placeholder="Search for..." aria-label="Пошук" />
       <button class="btn btn-outline-success search_button" type="submit">Search</button>
     </form>
     <div class="language container row col-1 ms-5">
@@ -161,8 +161,8 @@
       </div>
     </div>
   {% else %}
-    <form class="d-flex mx-auto me-2" id="search_form">
-      <input class="input_form_search_not_registered form-control me-2" type="search" placeholder="Search for..." aria-label="Пошук" />
+    <form class="d-flex mx-auto me-2" id="search_form" action="{% url "main:search" %}" method="get">
+      <input class="input_form_search_not_registered form-control me-2" name="q" type="search" placeholder="Search for..." aria-label="Пошук" />
       <button class="btn btn-outline-success search_button" type="submit">Search</button>
     </form>
     <div class="language container row col-1 ms-5">

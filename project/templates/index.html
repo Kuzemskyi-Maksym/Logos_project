@@ -8,6 +8,7 @@
 {% block css %}
   {{ block.super }}
   <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
 {% endblock %}
 
 {% block content %}
@@ -35,6 +36,47 @@
               <!-- Form -->
               <form>
 
+                <!-- Filter form -->
+                <div class="dropdown mb-2 bg-dark" style="margin-left: -30px; margin-top: -30px; border-radius: 10px;">
+
+                  <form action="{% if request.GET.q %}{% url "main:search" %}{% else %}{% url "main:home" %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on" {% if request.GET.on_sale == 'on' %}checked{% endif %}>
+                          {% if request.GET.q %}
+                              <input type="hidden" name="q" value="{{ request.GET.q }}">
+                          {% endif %}
+                          <label class="form-check-label" for="flexCheckDefault">
+                            Promotions
+                          </label>
+                      </div>
+                      <p class=" mx-3 text-white mt-3">Sort:</p>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"
+                          {% if not request.GET.order_by or request.GET.order_by == 'default' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault1">
+                              by Default
+                          </label>
+                      </div>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price" 
+                          {% if request.GET.order_by == 'price' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault2">
+                            from cheap to expensive
+                          </label>
+                      </div>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price"
+                          {% if request.GET.order_by == '-price' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault3">
+                            from expensive to cheap
+                          </label>
+                      </div>
+                      <button style="margin-left: 40% !important; margin-bottom: 10px !important;" type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
+                  </form>
+              </div> 
+
+
+
                 <form method="get" id="filterform">
                   <div class="border-bottom pb-4 mb-4">
                     <div class="container">
@@ -54,14 +96,14 @@
                           {% for producer in producers %}
                               <div class="form-check producer-item">
                                   <input style="line-height: .7;" 
-                                   class="form-check-input" 
-                                   type="checkbox" 
-                                   value="{{ producer.0 }}" 
-                                   id="producer{{ producer.0 }}" 
-                                   name="producers" 
-                                   {% if producer.0 in selected_producers %}checked{% endif %}
-                                   data-checked="{% if producer.0 in selected_producers %}true{% else %}false{% endif %}"
-                                   onchange="autofilterProducts_producers(); updateCheckboxState(this)">
+                                  class="form-check-input" 
+                                  type="checkbox" 
+                                  value="{{ producer.0 }}" 
+                                  id="producer{{ producer.0 }}" 
+                                  name="producers" 
+                                  {% if producer.0 in selected_producers %}checked{% endif %}
+                                  data-checked="{% if producer.0 in selected_producers %}true{% else %}false{% endif %}"
+                                  onchange="autofilterProducts_producers(); updateCheckboxState(this)">
                                   <label style="line-height: .7;"  class="form-check-label" for="producer{{ producer.0 }}">{{ producer.1 }}</label>
                               </div>
                           {% endfor %}
@@ -502,48 +544,8 @@
             </div>
           {% endfor %}
         </div>
-        <!--PAGINATOR-->
-          {% comment %} <nav aria-label="Page navigation example" style="margin-top: 40px !important;">
-            <ul class="pagination justify-content-center">
-                {% if products.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?{{ page_request_variable }}={{ products.previous_page_number }}">Previous</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">Previous</span>
-                    </li>
-                {% endif %}
-    
-                {% for num in products.paginator.page_range %}
-                    {% if num == 1 %}
-                        <li class="page-item"><a class="page-link"
-                                                href="?{{ page_request_variable }}={{ num }}">{{ num }}</a></li>
-                    {% elif num == products.number %}
-                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                    {% elif num == products.paginator.num_pages %}
-                        <li class="page-item"><a class="page-link"
-                                                href="?{{ page_request_variable }}={{ num }}">{{ num }}</a></li>
-                    {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
-                        <li class="page-item"><a class="page-link"
-                                                href="?{{ page_request_variable }}={{ num }}">{{ num }}</a></li>
-                    {% elif num == products.number|add:'-3' or num == products.number|add:'3' %}
-                        <li class="page-item disabled"><span class="page-link">...</span></li>
-                    {% endif %}
-                {% endfor %}
-    
-                {% if products.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?{{ page_request_variable }}={{ products.next_page_number }}">Next</a>
-                    </li>
-                {% else %}
-                    <li class="page-item disabled">
-                        <span class="page-link">Next</span>
-                    </li>
-                {% endif %}
-            </ul>
-        </nav> {% endcomment %}
-        <nav aria-label="Page navigation example" style="margin-top: 40px !important;">
+
+        {% comment %} <nav aria-label="Page navigation example" style="margin-top: 40px !important;">
           <ul class="pagination justify-content-center">
               {% if products.has_previous %}
                   <li class="page-item">
@@ -589,7 +591,56 @@
                   </li>
               {% endif %}
           </ul>
-      </nav>
+      </nav> {% endcomment %}
+
+      <nav aria-label="Page navigation example" style="margin-top: 40px !important;">
+        <ul class="pagination justify-content-center">
+            {% if products.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?{{ page_request_variable }}={{ products.previous_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Previous</span>
+                </li>
+            {% endif %}
+    
+            {% for num in products.paginator.page_range %}
+                {% if num == 1 %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% elif num == products.number %}
+                    <li class="page-item active">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% elif num == products.paginator.num_pages %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                    </li>
+                {% elif num == products.number|add:'-3' or num == products.number|add:'3' %}
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+    
+            {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?{{ page_request_variable }}={{ products.next_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Next</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <span class="page-link">Next</span>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
       
       </div>
     </div>
@@ -600,6 +651,8 @@
   {{ block.super }}
   <script src="{% static 'js/home.js' %}"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 {% endblock %}
 
 

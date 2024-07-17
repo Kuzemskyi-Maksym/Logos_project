@@ -125,62 +125,6 @@ var ssd_scopesBlock = document.getElementById("ssd_scopesBlock");
 var ossBlock = document.getElementById("ossBlock");
 
 
-// Function to handle view more/less with local storage
-// function handleViewMoreLess(items, viewMoreButton, viewLessButton, block) {
-//   // Apply the state from local storage
-//   const storedState = localStorage.getItem(key);
-//   if (storedState === "more") {
-//     // Show all items if the state is 'more'
-//     for (var i = 0; i < items.length; i++) {
-//       items[i].style.display = "block";
-//     }
-//     viewMoreButton.style.display = "none";
-//     viewLessButton.style.display = "block";
-//   } else {
-//     // Hide all items after the first 5 if the state is 'less' or not set
-//     for (var i = 5; i < items.length; i++) {
-//       items[i].style.display = "none";
-//     }
-//     viewMoreButton.style.display = "block";
-//     viewLessButton.style.display = "none";
-//   }
-
-//   // Add click event to view more button
-//   viewMoreButton.addEventListener("click", function (event) {
-//     // Prevent the form from being submitted
-//     event.preventDefault();
-
-//     // Show all items when view more is clicked
-//     for (var i = 0; i < items.length; i++) {
-//       items[i].style.display = "block";
-//     }
-
-//     // Hide the view more button and show the view less button
-//     viewMoreButton.style.display = "none";
-//     viewLessButton.style.display = "block";
-
-//     block.style.height = '180px';
-//   });
-
-
-//   // Add click event to view less button
-//   viewLessButton.addEventListener("click", function (event) {
-//     // Prevent the form from being submitted
-//     event.preventDefault();
-
-//     // Hide all items after the first 5 when view less is clicked
-//     for (var i = 5; i < items.length; i++) {
-//       items[i].style.display = "none";
-//     }
-
-//     // Hide the view less button and show the view more button
-//     viewLessButton.style.display = "none";
-//     viewMoreButton.style.display = "block";
-
-//     block.style.height = '0px';
-//   });
-// }
-
 // Function to handle view more/less
 function handleViewMoreLess(items, viewMoreButton, viewLessButton, block) {
   // Initially hide all items
@@ -223,45 +167,6 @@ function handleViewMoreLess(items, viewMoreButton, viewLessButton, block) {
   });
 }
 
-// Function to handle view more/less
-// function handleViewMoreLess(items, viewMoreButton, viewLessButton) {
-//   // Initially hide all items
-//   for (var i = 1000; i < items.length; i++) {
-//     items[i].style.display = "none";
-//   }
-
-//   // Add click event to view more button
-//   viewMoreButton.addEventListener("click", function (event) {
-//     // Prevent the form from being submitted
-//     event.preventDefault();
-
-//     // Show all items when view more is clicked
-//     for (var i = 0; i < items.length; i++) {
-//       items[i].style.display = "block";
-//     }
-
-//     // Hide the view more button and show the view less button
-//     viewMoreButton.style.display = "none";
-//     viewLessButton.style.display = "block";
-//   });
-
-//   // Add click event to view less button
-//   viewLessButton.addEventListener("click", function (event) {
-//     // Prevent the form from being submitted
-//     event.preventDefault();
-
-//     // Hide all items after the first 5 when view less is clicked
-//     for (var i = 0; i < items.length; i++) {
-//       items[i].style.display = "none";
-//     }
-
-//     // Hide the view less button and show the view more button
-//     viewLessButton.style.display = "none";
-//     viewMoreButton.style.display = "block";
-
-//     producersBlock.style.height = "auto";
-//   });
-// }
 
 // Call the function for producer, processor, processor cores, screen diagonal, screen resolution, RAM, OS, Additionally, and Color
 handleViewMoreLess(

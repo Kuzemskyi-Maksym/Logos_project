@@ -3,11 +3,23 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
+
+from . import utils
 from . import models
 from . import choises
 
 def index(request):
     products = models.Products.objects.all().order_by("id")
+
+    on_sale = request.GET.get('on_sale', None)
+    order_by = request.GET.get('order_by', None)
+    query_new = request.GET.get("q")
+
+    if on_sale:
+        products = products.filter(discount__gt=0)
+
+    if order_by and order_by != "default":
+        products = products.order_by(order_by)
 
     selected_producers = request.GET.getlist('producers') 
     selected_processors = request.GET.getlist('processors') 
@@ -44,6 +56,8 @@ def index(request):
     # Якщо є умови для фільтрації, застосовуємо їх
     if query:
         products = products.filter(query)
+    if query_new:
+        products = utils.q_search(query_new)
 
     paginator = Paginator(products, 4)
     page_request_variable = "page"
@@ -64,7 +78,7 @@ def index(request):
         "title": "Home",
         "products": products,
         "page_request_variable": page_request_variable,
-        "query_params": query_params,  # Передаємо параметри в шаблон
+        "query_params": query_params,
         # 
         'selected_producers': selected_producers,
         'selected_processors': selected_processors,
