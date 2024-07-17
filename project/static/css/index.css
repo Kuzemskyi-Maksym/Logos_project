@@ -10,6 +10,10 @@
   fill: var(--link-color);
 }
 
+.form-check-input {
+  margin-left: -17px !important;
+}
+
 .filters {
   background-color: rgb(255, 255, 255);
   height: 100%;

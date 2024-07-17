@@ -14,17 +14,13 @@
     <div class="pt-3 container bg-dark m-0 p-0" style="height: 100px; overflow-x: hidden;">
       <div class="row mt-3 p-0 d-flex justify-content-evenly">
         {% if user.is_authenticated %}
-          {% comment %} <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="{% url "account:profile" %}">Account</a></div> {% endcomment %}
-          <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="#">Account</a></div>
+          <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="{% url "accounts:profile" %}">Account</a></div>
           <div class="m-0 p-0 vr"></div>
-          {% comment %} <div class="h5 text-white col-3 p-0 my-0"><a href="{% url "account:logout" %}">Logout</a></div> {% endcomment %}
-          <div class="h5 text-white col-3 p-0 my-0"><a href="#">Logout</a></div>
+          <div class="h5 text-white col-3 p-0 my-0"><a href="{% url "accounts:logout" %}">Logout</a></div>
         {% else %}
-          {% comment %} <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="{% url "account:login" %}">Sign In</a></div> {% endcomment %}
-          <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="#">Sign In</a></div>
+          <div class="h5 col-3 text-white p-0 my-0 mx-0"><a href="{% url "accounts:login" %}">Sign In</a></div>
           <div class="m-0 p-0 vr"></div>
-          {% comment %} <div class="h5 text-white col-3 p-0 my-0"><a href="{% url "account:register" %}">Sign Up</a></div> {% endcomment %}
-          <div class="h5 text-white col-3 p-0 my-0"><a href="#">Sign Up</a></div>
+          <div class="h5 text-white col-3 p-0 my-0"><a href="{% url "accounts:registration" %}">Sign Up</a></div>
 
         {% endif %}
         
@@ -138,7 +134,7 @@
 
   {% if user.is_authenticated %}
     <form class="d-flex mx-auto me-2" id="search_form" action="{% url "main:search" %}" method="get">
-      <input name="q" class="input_form_search_registered form-control me-2" type="search" placeholder="Search for..." aria-label="Пошук" />
+      <input  class="input_form_search_registered form-control me-2" name="q" type="search" placeholder="Search for..." aria-label="Пошук" />
       <button class="btn btn-outline-success search_button" type="submit">Search</button>
     </form>
     <div class="language container row col-1 ms-5">
@@ -155,9 +151,8 @@
         <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart p-0 col-2" />
 
         {% comment %} user profile photo, if user is authenticated {% endcomment %}
-        {% comment %} <img src="{% static 'images/user_acc.svg' %}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '/accounts/user-profile';" /> {% endcomment %}
-        {% comment %} <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '{% url "account:profile" %}'" /> {% endcomment %}
-        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '#'" />
+        <img src="{% static 'images/user_acc.svg' %}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '/accounts/user-profile';" />
+        {% comment %} <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '#'" /> {% endcomment %}
       </div>
     </div>
   {% else %}
