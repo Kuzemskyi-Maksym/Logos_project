@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sites",
+    "django.contrib.postgres",
 
     "multiselectfield",
     "crispy_forms",
@@ -61,20 +62,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 
-
-SOCIALACCOUNT_PROVIDERS = {
-    "google": {
-        "SCOPE": [
-            "profile",
-            "email",
-        ],
-        "AUTH_PARAMS": {
-            "access_type": "online",
-        },
-        "OAUTH_PKCE_ENABLED": True,
-    }
-}
-LOGIN_REDIRECT_URL = "/shop"  # Redirect URL after successful login
 
 
 MIDDLEWARE = [
