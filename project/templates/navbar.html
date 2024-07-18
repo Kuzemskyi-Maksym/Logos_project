@@ -152,7 +152,7 @@
       <div class="row align-items-center registered d-flex justify-content-evenly m-0">
         <img src="{% static 'images/orders.svg' %}" alt="" title="orders" class="orders p-0 col-2" />
         <img src="{% static 'images/wishlist.svg' %}" alt="" title="wishlist" class="wishlist p-0 col-2" />
-        <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart p-0 col-2" />
+        <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart p-0 col-2" onclick="location.href = '{% url 'accounts:users_cart' %}'" />
 
         {% comment %} user profile photo, if user is authenticated {% endcomment %}
         <img src="{% static 'images/user_acc.svg' %}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '{% url "accounts:profile" %}'" />

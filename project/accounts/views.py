@@ -81,4 +81,5 @@ def profile(request):
     return render(request, 'accounts/profile.html', context)
 
 
-
+def users_cart(request):
+    return render(request, 'accounts/users_cart.html')

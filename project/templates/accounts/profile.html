@@ -15,18 +15,23 @@
     <div class="row">
         <div class="container mt-5">
             <div class="row">
-                <!-- Профиль с данными пользователя -->
-                <div class="col-md-5">
+                <!-- Profile with user data -->
+                <div class="col-md-5" style="margin-top: -100px !important;">
                     <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-                        <h3 class="text-center mb-4">Профиль пользователя</h3>
+                        <h3 class="text-center mb-4">User Profile</h3>
                         <form action="{% url "accounts:profile" %}" method="post" enctype="multipart/form-data">
                             {% csrf_token %}
                             <div class="row">
                                 <div class="col-md-12 mb-3 text-center">
                                     {% if user.image %}
-                                        <img src="{{ user.image.url }}"
+                                        {% comment %} <img src="{{ user.image.url }}"
                                             alt=" " class="img-fluid rounded-circle"
-                                            style="max-width: 150px;">
+                                            style="max-width: 150px;"> {% endcomment %}
+
+                                        <div class="img_container" style="height: 200px !important; width: 200px !important; margin: auto; ">
+                                            <img src="{{ user.image.url }}" class="card-img-top" alt=" " style="max-width: 100%; height: auto;  object-fit: contain; max-height: 170px;  border-radius: 10% !important;" />
+                                            {% comment %} <img src="{{ user.image.url }}" class="card-img-top" alt=" " style="max-width: 100%; height: auto;  object-fit: contain; max-height: 170px;  border-radius: 10px;" /> {% endcomment %}
+                                        </div>
                                     {% else %}
                                         <img src="{% static "images/baseavatar.jpg" %}"
                                             alt=" " class="img-fluid rounded-circle"
@@ -40,7 +45,7 @@
                                         {% endif %}
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="id_first_name" class="form-label">Имя*</label>
+                                    <label for="id_first_name" class="form-label">Name*</label>
                                     <input type="text" class="form-control" id="id_first_name"
                                         name="first_name"
                                         placeholder="Введите ваше имя"
@@ -51,7 +56,7 @@
                                         {% endif %}
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="id_last_name" class="form-label">Фамилия*</label>
+                                    <label for="id_last_name" class="form-label">Surname*</label>
                                     <input type="text" class="form-control" id="id_last_name"
                                         name="last_name"
                                         placeholder="Введите вашу фамилию"
@@ -62,7 +67,7 @@
                                         {% endif %}
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="id_username" class="form-label">Имя пользователя*</label>
+                                    <label for="id_username" class="form-label">Username*</label>
                                     <input type="text" class="form-control" id="id_username"
                                         name="username"
                                         placeholder="Введите ваше имя пользователя"
@@ -84,16 +89,31 @@
                                         {% endif %}
                                 </div>
                             </div>
-                            <button type="submit" class="btn btn-dark">Сохранить</button>
+                            <div class="buttton" style="text-align: center; align-items: center;">
+                                <button type="submit" style="margin: auto !important;" class="btn btn-dark">Save</button>
+                            </div>
                         </form>
                     </div>
                 </div>
                 <!-- Basket -->
 
+                <div class="col-md-7">
+                    <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
+                        <h3 class="text-center mb-4">Корзина</h3>
+                        <div class="container" id="cart-items-container">
+                            <!-- Разметка корзины -->
+                            {% include "carts/included_cart.html" %}
+                            <!-- Закончилась разметка корзины -->
+                        </div>
+                    </div>
+                </div>
+
+                {% comment %} {% include "carts/included_cart.html" %} {% endcomment %}
+
                 <!-- Orders placed -->
                 <div class="col-md-12">
                     <div class=" bg-white p-4 mb-4 mx-2 rounded custom-shadow">
-                        <h3 class="text-center mb-4">Мои заказы</h3>
+                        <h3 class="text-center mb-4">My orders</h3>
                         <!-- Разметка заказов -->
                         <div class="container">
                             <div class="accordion" id="accordionExample">
