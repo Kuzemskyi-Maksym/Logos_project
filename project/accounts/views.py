@@ -2,7 +2,7 @@ from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 
-from .forms import SignUpForm, UserLoginForm
+from .forms import SignUpForm, UserLoginForm, ProfileForm
 
 def login(request):
 
@@ -30,6 +30,8 @@ def login(request):
 
 
 def registration(request):
+    
+    site_mobile_menu = True
 
     if request.method == 'POST':
         form = SignUpForm(data=request.POST)
@@ -41,7 +43,6 @@ def registration(request):
     else:
         form = SignUpForm()
 
-    site_mobile_menu = True
 
 
     context = {
@@ -53,15 +54,26 @@ def registration(request):
     return render(request, 'accounts/registration.html', context)
 
 
-def profile(request):
-    context = {
-        'title': 'Account'
-    }
-    return render(request, 'accounts/profile.html', context)
-
-
 def logout(request):
     auth.logout(request)
     return redirect('/shop')
+
+
+def profile(request):
+
+    if request.method == 'POST':
+        form = ProfileForm(data=request.POST, instance = request.user, files = request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/accounts/profile')
+    else:
+        form = ProfileForm(instance = request.user)
+
+    context = {
+        'title': 'Account',
+        "form": form,
+    }
+    return render(request, 'accounts/profile.html', context)
+
 
 
