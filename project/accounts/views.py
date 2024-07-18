@@ -1,12 +1,13 @@
-from audioop import reverse
-import email
 from django.contrib import auth
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
-from accounts.forms import UserLoginForm
+from .forms import SignUpForm, UserLoginForm
 
 def login(request):
+
+    site_mobile_menu = True
+
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
         if form.is_valid():
@@ -20,16 +21,34 @@ def login(request):
         form = UserLoginForm()
 
     context = {
-        'title': 'Home - Login',
-        'form': form
+        'site_mobile_menu': site_mobile_menu,
+        'title': 'Login',
+        'form': form,
     }
     return render(request, 'accounts/login.html', context)
 
 
 
 def registration(request):
+
+    if request.method == 'POST':
+        form = SignUpForm(data=request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.instance
+            auth.login(request, user)
+            return HttpResponseRedirect('/accounts/profile')
+    else:
+        form = SignUpForm()
+
+    site_mobile_menu = True
+
+
     context = {
-        'title': 'Registration'
+        "site_mobile_menu": site_mobile_menu,
+        'title': 'Registration',
+        'form': form,
+
     }
     return render(request, 'accounts/registration.html', context)
 
@@ -42,6 +61,7 @@ def profile(request):
 
 
 def logout(request):
-    ...
+    auth.logout(request)
+    return redirect('/shop')
 
 

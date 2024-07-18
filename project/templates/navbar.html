@@ -2,7 +2,11 @@
 
 <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
 
-<div class="site-mobile-menu site-navbar-target burger" style="margin-top: -100px !important; ">
+{% if site_mobile_menu %}
+  <div class="site-mobile-menu site-navbar-target burger" style="margin-top: -60px !important; ">
+{% else %}
+  <div class="site-mobile-menu site-navbar-target burger" style="margin-top: -100px !important; ">
+{% endif %}
 
   <div class="site-mobile-menu-header badge-dark" style="height: 56.3px;">
     <a class="navbar-brand" href="{% url 'main:home' %}"><img src="{% static 'images/logo.png' %}" alt="" class="d-inline-block align-text-top logo_photo_burger" /></a>
@@ -151,8 +155,7 @@
         <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart p-0 col-2" />
 
         {% comment %} user profile photo, if user is authenticated {% endcomment %}
-        <img src="{% static 'images/user_acc.svg' %}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '/accounts/user-profile';" />
-        {% comment %} <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '#'" /> {% endcomment %}
+        <img src="{% static 'images/user_acc.svg' %}" alt="" title="account" class="account p-0 col-2" onclick="location.href = '{% url "accounts:profile" %}'" />
       </div>
     </div>
   {% else %}
