@@ -1,6 +1,7 @@
 from django.contrib import auth
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 
 from .forms import SignUpForm, UserLoginForm, ProfileForm
 
@@ -39,6 +40,8 @@ def registration(request):
             form.save()
             user = form.instance
             auth.login(request, user)
+            if request.POST.get('next', None):
+                    return HttpResponseRedirect(request.POST.get('next'))
             return HttpResponseRedirect('/accounts/profile')
     else:
         form = SignUpForm()
@@ -54,11 +57,13 @@ def registration(request):
     return render(request, 'accounts/registration.html', context)
 
 
+@login_required()
 def logout(request):
     auth.logout(request)
     return redirect('/shop')
 
 
+@login_required()
 def profile(request):
 
     if request.method == 'POST':

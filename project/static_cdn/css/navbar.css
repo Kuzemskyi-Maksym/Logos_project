@@ -11,7 +11,7 @@ body:before {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(226, 225, 225, 0.5);
+  background: #e2e1e180;
   -webkit-transition: 0.3s all ease;
   -o-transition: 0.3s all ease;
   transition: 0.3s all ease;
