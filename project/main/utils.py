@@ -10,7 +10,4 @@ def q_search(query_new):
     vector = SearchVector('name', 'description')
     query = SearchQuery(query_new)
     
-    return models.Products.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gt=0).order_by('-rank')
-    
-
-    
+    return models.Products.objects.annotate(rank=SearchRank(vector, query)).filter(rank__gt=0).order_by('-rank')    

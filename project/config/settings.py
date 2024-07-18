@@ -58,9 +58,9 @@ SITE_ID = 1  # Replace with your actual site ID
 
 
 AUTHENTICATION_BACKENDS = (
-    "django.contrib.auth.backends.ModelBackend",
-    # "allauth.account.auth_backends.AuthenticationBackend",
+    'django.contrib.auth.backends.ModelBackend',
 )
+
 
 
 
@@ -166,8 +166,11 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 
+
 INTERNAL_IPS = [
     # ...
     "127.0.0.1",
     # ...
 ]
+
+AUTH_USER_MODEL = 'accounts.User'

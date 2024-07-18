@@ -23,9 +23,11 @@
   </head>
   <body>
     {% include 'navbar.html' %}
-    {% block content %}
 
-    {% endblock %}
+    {% block content %}
+      {% comment %} {% include "includes/notifications.html" %} {% endcomment %}
+
+    {% endblock content %}
     
     {% block js %}
       
