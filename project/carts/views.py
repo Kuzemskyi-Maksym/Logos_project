@@ -20,14 +20,28 @@ def cart_add(request, product_slug):
         else:
             Cart.objects.create(user=request.user, product=product, quantity=1)
     
-    return redirect(request.META['HTTP_REFERER'])
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    else:
+        # Handle the case where HTTP_REFERER is not set
+        return redirect('main:home')
 
 
 def cart_change(request, product_slug):
     ...
 
 
-def cart_remove(request, product_slug):
-    ...
+def cart_remove(request, cart_id):
+
+    cart = Cart.objects.get(id=cart_id)
+    cart.delete()
+    
+    referer = request.META.get('HTTP_REFERER')
+    if referer:
+        return redirect(referer)
+    else:
+        # Handle the case where HTTP_REFERER is not set
+        return redirect('accounts:users_cart')
 
 
