@@ -45,6 +45,11 @@
         <div class="price container">{{ object.price }}</div>
         <div class="fef">{{ object.additionally  }}</div>
       </div>
+      <div class="bucket" style="height: 40px !important; width: 40px !important; z-index: 10000; margin-top: -60px; margin-left: 150px !important;">
+        <a href="{% url 'carts:cart_add' object.slug%}">
+          <img style="height: 40px !important; width: 40px !important;" src="{% static 'images/cart_white.svg' %}" alt="">
+        </a>
+      </div>
     </div>
   </div>
   {% endblock %}

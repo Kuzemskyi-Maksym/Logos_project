@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 ]
 
 
-SITE_ID = 1  # Replace with your actual site ID
+SITE_ID = 1 
 
 
 AUTHENTICATION_BACKENDS = (

@@ -558,15 +558,16 @@ a:hover {
 }
 
 .orders {
-  height: 23px;
+  height: 27px;
+
 }
 
 .wishlist {
-  height: 36px;
+  height: 40px;
 }
 
 .cart {
-  height: 26px;
+  height: 35px;
 }
 
 .account {
@@ -591,4 +592,18 @@ a:hover {
 .bn46 {
   width: 120px;
   height: 40px;
+}
+
+.cartt_index {
+  z-index: 100;
+  height: auto;
+  width: 16px !important;
+  scale: .7;
+  border-radius: 50% !important;
+  background-color: green;
+  color: white !important;
+  margin-top: 16px !important;
+  margin-left: -46px !important;
+
+  display: block;
 }
