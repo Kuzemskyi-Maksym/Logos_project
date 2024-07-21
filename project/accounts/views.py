@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
 
+from carts.models import Cart
+
 from .forms import SignUpForm, UserLoginForm, ProfileForm
 
 def login(request):
@@ -15,8 +17,15 @@ def login(request):
             username = form.cleaned_data.get('username')
             password = form.cleaned_data.get('password')
             user = auth.authenticate(username=username, password=password)
+
+            session_key = request.session.session_key
+
             if user is not None:
                 auth.login(request, user)
+
+                if session_key:
+                    Cart.objects.filter(session_key = session_key).update(user=user)
+
                 return HttpResponseRedirect('/accounts/profile')
     else:
         form = UserLoginForm()
@@ -38,8 +47,15 @@ def registration(request):
         form = SignUpForm(data=request.POST)
         if form.is_valid():
             form.save()
+
+            session_key = request.session.session_key
+
             user = form.instance
             auth.login(request, user)
+
+            if session_key:
+                    Cart.objects.filter(session_key = session_key).update(user=user)
+
             if request.POST.get('next', None):
                     return HttpResponseRedirect(request.POST.get('next'))
             return HttpResponseRedirect('/accounts/profile')

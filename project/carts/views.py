@@ -9,34 +9,34 @@ from carts.models import Cart
 def cart_add(request, product_slug):
     product = Products.objects.get(slug=product_slug)
 
+    if not request.user.is_authenticated:
+        # Створення сесійного ключа, якщо він ще не існує
+        if not request.session.session_key:
+            request.session.create()
+
     if request.user.is_authenticated:
         carts = Cart.objects.filter(user=request.user, product=product)
 
         if carts.exists():
             cart = carts.first()
-            if cart:
-                cart.quantity += 1
-                cart.save()
-        
+            cart.quantity += 1
+            cart.save()
         else:
             Cart.objects.create(user=request.user, product=product, quantity=1)
-
     else:
         carts = Cart.objects.filter(session_key=request.session.session_key, product=product)
 
         if carts.exists():
             cart = carts.first()
-            if cart:
-                cart.quantity += 1
-                cart.save()
+            cart.quantity += 1
+            cart.save()
         else:
             Cart.objects.create(session_key=request.session.session_key, product=product, quantity=1)
-    
+
     referer = request.META.get('HTTP_REFERER')
     if referer:
         return redirect(referer)
     else:
-        # Handle the case where HTTP_REFERER is not set
         return redirect('main:home')
 
 
