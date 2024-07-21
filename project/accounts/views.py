@@ -80,7 +80,6 @@ def profile(request):
     }
     return render(request, 'accounts/profile.html', context)
 
-@login_required()
 def users_cart(request):
 
     site_mobile_menu = 'true'

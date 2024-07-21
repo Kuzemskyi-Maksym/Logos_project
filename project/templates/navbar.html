@@ -181,9 +181,15 @@
         <div class="h5 text-white col-5 p-0 my-0">EN</div>
       </div>
     </div>
-    <div class="container visitors p-0 m-0" style="width: 100px !important;">
-      <div class="row align-items-center d-flex justify-content-center m-0" style="margin: auto !important;">
-        {% comment %} <img src="{% static 'images/user_acc.svg' %}" alt="" title="sign In/sign Up" class="signIn_signUp p-0" onclick="location.href = '{% url 'accounts:login' %}';" /> {% endcomment %}
+    
+    <div class="container visitors p-0 m-0" style="width: 200px !important;">
+      <div class="row justify-content-around d-flex justify-content-center m-0" style="margin: auto !important;">
+        <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart_no_user p-0 col-2" onclick="location.href = '{% url 'accounts:users_cart' %}'" />
+        <div class="cartt_index" style="margin-left: -80px !important;">
+          <span class="quantity" style="text-align: center; padding: 0 !important; color: white; font-size: 15px; font-weight: bold; margin-left: -8px !important;">
+          {{ carts.total_quantity }}
+          </span>
+        </div>
         <img src="{% static 'images/user_acc.svg' %}" alt="" title="sign In/sign Up" class="signIn_signUp p-0" onclick="location.href = '{% url 'accounts:login' %}'" />
 
       </div>

@@ -541,6 +541,7 @@ a:hover {
 #search_form {
   margin-left: 90px !important;
   margin-right: 0 !important;
+  width: 700px !important;
 }
 
 .search_button {
@@ -568,6 +569,7 @@ a:hover {
 
 .cart {
   height: 35px;
+
 }
 
 .account {

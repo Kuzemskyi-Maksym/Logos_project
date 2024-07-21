@@ -29,6 +29,7 @@
     {% endblock content %}
     
     {% block js %}
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRvQ9dFTD/9e+XT0a0L1RD9QlQ6fM0+ntZR6H6Wl2" crossorigin="anonymous"></script>
       
     {% endblock js %}
 
@@ -39,7 +40,7 @@
     <script src="{% static 'js/js_header/jquery.sticky.js' %}"></script>
     <script src="{% static 'js/js_header/main.js' %}"></script>
     <script src="{% static 'js/base.js' %}"></script>
-    <script src="{% static 'js/jquery/jquery-3.7.0.min.js' %}"></script>
-    <script src="{% static 'js/jquery-ajax.js' %}"></script>
+    {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> {% endcomment %}
+    <script src="{% static 'js/ajax.js' %}"></script>
   </body>
 </html>
