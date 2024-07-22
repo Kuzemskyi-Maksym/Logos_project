@@ -30,8 +30,14 @@ class Cart(models.Model):
 
     objects = CartQueryset().as_manager()
 
-    def __str__(self):
-        return f"User - {self.user.username} | Product - {self.product.name} | Quantity - {self.quantity}"
-    
+
     def products_price(self):
        return round(self.product.sell_price() * self.quantity, 2)
+
+
+    def __str__(self):
+        if self.user:
+            return f"User - {self.user.username} | Product - {self.product.name} | Quantity - {self.quantity}"
+
+        return f"User - Anonymous | Product - {self.product.name} | Quantity - {self.quantity}"
+    

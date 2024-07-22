@@ -1,6 +1,7 @@
 from tabnanny import verbose
 from django.db import models
 from django.forms import model_to_dict
+from django.urls import reverse
 from multiselectfield import MultiSelectField
 from . import choises
 
@@ -41,6 +42,9 @@ class Products(models.Model):
     def __str__(self) -> str:
         return self.name
     
+    def get_absolute_url(self):
+        return reverse("main:product_detail", kwargs={"product_slug": self.slug})
+    
     def display_id(self):
         return f'{self.id:05}'
 
@@ -48,6 +52,9 @@ class Products(models.Model):
         if self.discount:
             return round(self.price - (self.price * self.discount / 100), 2)
         return self.price
+    
+    
+    
 
 
     class Meta:
