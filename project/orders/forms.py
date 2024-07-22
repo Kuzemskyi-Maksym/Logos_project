@@ -1,13 +1,31 @@
 from django import forms
 
-class CreatedOrderForm(forms.Form):
+class CreateOrderForm(forms.Form):
 
     first_name = forms.CharField()
     last_name = forms.CharField()
     phone_number = forms.CharField()
     requires_delivery = forms.ChoiceField()
-    delivery_address = forms.CharField(required=False)
-    payment_on_get = forms.ChoiceField()
+    
+
+    requires_delivery = forms.ChoiceField(
+        widget=forms.RadioSelect(),
+        choices=[
+            {"0", False},
+            {"1", True},
+        ],
+        initial=0,
+    )
+
+
+    payment_on_get = forms.ChoiceField(
+        widget=forms.RadioSelect(),
+        choices=[
+            {"0", False},
+            {"1", True},
+        ],
+        initial=0,
+    )
 
 
 
@@ -58,14 +76,7 @@ class CreatedOrderForm(forms.Form):
     #     )
     # )
 
-    # requires_delivery = forms.ChoiceField(
-    #     widget=forms.RadioSelect(),
-    #     choices=[
-    #         {"0", False},
-    #         {"1", True},
-    #     ],
-    #     initial=0,
-    # )
+    
 
     # delivery_address = forms.CharField(
     #     widget=forms.Textarea(
@@ -85,11 +96,4 @@ class CreatedOrderForm(forms.Form):
     #     required=False
     # )
 
-    # payment_on_get = forms.ChoiceField(
-    #     widget=forms.RadioSelect(),
-    #     choices=[
-    #         {"0", False},
-    #         {"1", True},
-    #     ],
-    #     initial=0,
-    # )
+    
