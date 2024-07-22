@@ -10,6 +10,10 @@ from orders.models import Order, OrderItem
 
 @login_required()
 def create_order(request):
+
+    is_create_order_url = request.path.endswith('create_order/')
+
+
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
         if form.is_valid():
@@ -49,7 +53,7 @@ def create_order(request):
 
                         return redirect('accounts:profile')
             except ValidationError as e:
-                return redirect('carts:order')
+                return redirect('orders:create_order')
     else:
         initial = {
             'first_name': request.user.first_name,
@@ -59,6 +63,7 @@ def create_order(request):
         form = CreateOrderForm(initial=initial)
 
     context = {
+        'is_create_order_url': is_create_order_url,
         'title': 'Order placement',
         'form': form,
     }

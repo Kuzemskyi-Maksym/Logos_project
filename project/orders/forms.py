@@ -1,3 +1,4 @@
+import re
 from django import forms
 
 class CreateOrderForm(forms.Form):
@@ -21,3 +22,16 @@ class CreateOrderForm(forms.Form):
         ],
         initial='0',
     )
+
+    def clean_phone_number(self):
+        data = self.cleaned_data['phone_number']
+
+        if not data.isdigit():
+            raise forms.ValidationError('The phone number can only contain digits')
+        
+        pattern = re.compile(r'^\d{10}$')
+        if not pattern.match(data):
+            raise forms.ValidationError('The phone number must be 10 digits long')
+        
+        return data
+

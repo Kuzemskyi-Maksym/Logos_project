@@ -64,7 +64,10 @@
           </div>
           <!-- Закончилась разметка корзины -->
         </div>
-        {% if carts %}
+        {% comment %} {% if carts and not request.path == '/create_order/' %}
+            <a class="btn btn-dark" href="{% url "orders:create_order" %}">Place an order</a>
+        {% endif %}      {% endcomment %}
+        {% if carts and not is_create_order_url %}
           <a class="btn btn-dark" href="{% url "orders:create_order" %}">Place an order</a>
         {% endif %}
       </div>
