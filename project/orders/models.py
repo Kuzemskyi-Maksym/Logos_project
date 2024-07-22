@@ -4,7 +4,6 @@ from accounts.models import User
 from main.models import Products
 
 class OrderitemQueryset(models.QuerySet):
-    
     def total_price(self):
         return sum(cart.products_price() for cart in self)
     
@@ -32,7 +31,6 @@ class Order(models.Model):
     def __str__(self):
         return f"Order № {self.pk} | Buyer {self.user.first_name} {self.user.last_name}"
 
-
 class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Products, on_delete=models.SET_DEFAULT, null=True, default=None)
@@ -40,7 +38,6 @@ class OrderItem(models.Model):
     price = models.DecimalField(max_digits=7, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Date of sale")
-
 
     class Meta:
         db_table = "order_item"

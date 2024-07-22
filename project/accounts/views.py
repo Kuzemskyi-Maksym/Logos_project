@@ -18,13 +18,13 @@ def login(request):
             password = form.cleaned_data.get('password')
             user = auth.authenticate(username=username, password=password)
 
-            session_key = request.session.session_key
+            # session_key = request.session.session_key
 
             if user is not None:
                 auth.login(request, user)
 
-                if session_key:
-                    Cart.objects.filter(session_key = session_key).update(user=user)
+                # if session_key:
+                #     Cart.objects.filter(session_key = session_key).update(user=user)
 
                 return HttpResponseRedirect('/accounts/profile')
     else:

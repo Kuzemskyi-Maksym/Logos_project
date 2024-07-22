@@ -23,19 +23,17 @@ def create_order(request):
                             user=user,
                             phone_number=form.cleaned_data['phone_number'],
                             requires_delivery=form.cleaned_data['requires_delivery'],
-                            delivery_address=form.cleaned_data['delivery_address'],
+                            delivery_address=form.cleaned_data['delivery_address'] if form.cleaned_data['requires_delivery'] == '1' else '',
                             payment_on_get=form.cleaned_data['payment_on_get'],
                         )
                         for cart_item in cart_items:
-                            product=cart_item.product
-                            name=cart_item.product.name
-                            price=cart_item.product.sell_price()
-                            quantity=cart_item.quantity
-
+                            product = cart_item.product
+                            name = cart_item.product.name
+                            price = cart_item.product.sell_price()
+                            quantity = cart_item.quantity
 
                             if product.quantity < quantity:
-                                raise ValidationError(f'Insufficient quantity of goods {name} on stock\
-                                                       In stock - {product.quantity}')
+                                raise ValidationError(f'Insufficient quantity of goods {name} on stock. In stock - {product.quantity}')
 
                             OrderItem.objects.create(
                                 order=order,
@@ -56,7 +54,7 @@ def create_order(request):
         initial = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
-            }
+        }
 
         form = CreateOrderForm(initial=initial)
 
