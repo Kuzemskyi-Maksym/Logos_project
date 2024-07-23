@@ -8,11 +8,14 @@ from orders.forms import CreateOrderForm
 from carts.models import Cart
 from orders.models import Order, OrderItem
 
+import logging
+
+
+logger = logging.getLogger(__name__)
+
 @login_required()
 def create_order(request):
-
     is_create_order_url = request.path.endswith('create_order/')
-
 
     if request.method == 'POST':
         form = CreateOrderForm(data=request.POST)
@@ -27,7 +30,7 @@ def create_order(request):
                             user=user,
                             phone_number=form.cleaned_data['phone_number'],
                             requires_delivery=form.cleaned_data['requires_delivery'],
-                            delivery_address=form.cleaned_data['delivery_address'] if form.cleaned_data['requires_delivery'] == '1' else '',
+                            delivery_address=form.cleaned_data['delivery_address'] if form.cleaned_data['requires_delivery'] else '',
                             payment_on_get=form.cleaned_data['payment_on_get'],
                         )
                         for cart_item in cart_items:
@@ -50,16 +53,18 @@ def create_order(request):
                             product.save()
 
                         cart_items.delete()
-
                         return redirect('accounts:profile')
             except ValidationError as e:
-                return redirect('orders:create_order')
+                logger.error(f'Order validation error: {e.message}')
+                form.add_error(None, e.message)
+        else:
+            logger.error(f'Form validation errors: {form.errors}')
+            form.add_error(None, 'Please correct the errors below.')
     else:
         initial = {
             'first_name': request.user.first_name,
             'last_name': request.user.last_name,
         }
-
         form = CreateOrderForm(initial=initial)
 
     context = {
