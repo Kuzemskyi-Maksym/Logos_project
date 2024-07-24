@@ -1,28 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% comment %} {% extends 'base.html' %}
-{% load static %}
-
-{% block head_title %}
-  {{ title }}
-{% endblock %}
-
-{% block css %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% static 'css/product.css' %} " />
-{% endblock %}
-
-{% block content %}
-  <div class="fd" style="margin-top: 300px !important;">detail</div>
-{% endblock %}
-
-{% block js %}
-  {{ block.super }}
-  <script src="{% static 'js/home.js' %}"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-{% endblock %} {% endcomment %}
-
 {% block head_title %}
   {{ title|capfirst }}
 {% endblock %}
@@ -52,58 +30,31 @@
       </div>
     </div>
   </div>
-  {% endblock %}
 
-  <!-- PAGINATION -->
-
-  {% comment %} <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center">
-      {% if products.has_previous %}
-        <li class="page-item">
-          <a class="page-link" href="?{{ page_request_variable }}={{ products.previous_page_number }}">Previous</a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">Previous</span>
-        </li>
-      {% endif %}
-
-      {% for num in products.paginator.page_range %}
-        {% if num == 1 %}
-          <li class="page-item">
-            <a class="page-link" href="?{{ page_request_variable }}={{ num }}">{{ num }}</a>
-          </li>
-        {% elif num == products.number %}
-          <li class="page-item active">
-            <span class="page-link">{{ num }}</span>
-          </li>
-        {% elif num == products.paginator.num_pages %}
-          <li class="page-item">
-            <a class="page-link" href="?{{ page_request_variable }}={{ num }}">{{ num }}</a>
-          </li>
-        {% elif num > (products.number|add:'-3' and num < (products.number|add:'3')) %}
-          <li class="page-item">
-            <a class="page-link" href="?{{ page_request_variable }}={{ num }}">{{ num }}</a>
-          </li>
-        {% elif num == (products.number|add:'-3' or num == (products.number|add:'3')) %}
-          <li class="page-item disabled">
-            <span class="page-link">...</span>
-          </li>
-        {% endif %}
+    <h2>Comments</h2>
+      {% for comment in comments %}
+          <div>
+              <p><strong>{{ comment.user.username }}</strong></p>
+              <p>{{ comment.text }}</p>
+              <p><em>{{ comment.created_timestamp }}</em></p>
+          </div>
       {% endfor %}
 
-      {% if products.has_next %}
-        <li class="page-item">
-          <a class="page-link" href="?{{ page_request_variable }}={{ products.next_page_number }}">Next</a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <span class="page-link">Next</span>
-        </li>
-      {% endif %}
-    </ul>
-  </nav>
-{% endblock %} {% endcomment %}
+      <h2>Add a Comment</h2>
+      {% if request.user.is_authenticated %}
+      <form method="post" action="{% url "main:product_detail" object.slug%}">
+          {% csrf_token %}
+          {{ comment_form.as_p }}
+          <button type="submit">Post Comment</button>
+      </form>
+    {% else %}
+    <p>You must be logged in to add a comment.</p>
+    {% endif %}
+  {% endblock %}
+
+
+
+
 
 {% block js %}
   {{ block.super }}

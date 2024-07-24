@@ -1,8 +1,10 @@
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+
+from main.forms import CommentForm
 
 from . import utils
 from . import models
@@ -111,5 +113,31 @@ def index(request):
 # def product_detail(request):
 def product_detail(request, product_slug=None):
     instance = get_object_or_404(models.Products, slug=product_slug)
-    context = {"title": instance.name, "object": instance}
+
+    comments = instance.comments.all()
+
+    if request.method == 'POST':
+        comment_form = CommentForm(request.POST)
+        if comment_form.is_valid():
+            new_comment = comment_form.save(commit=False)
+            new_comment.product = instance
+            new_comment.user = request.user
+            new_comment.save()
+
+            referer = request.META.get('HTTP_REFERER')
+            if referer:
+                return redirect(referer)
+            else:
+                # Handle the case where HTTP_REFERER is not set
+                return redirect('main:home')
+    else:
+        comment_form = CommentForm()
+
+    context = {
+        "title": instance.name, 
+        "object": instance, 
+        'comments': comments,
+        'comment_form': comment_form,
+        }
+    
     return render(request, "product_detail.html", context)

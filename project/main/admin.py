@@ -26,3 +26,11 @@ class ProductModelAdmin(admin.ModelAdmin):
         ('additionally', 'color')
 
     ]
+
+
+@admin.register(models.Comment)
+class CommentModelAdmin(admin.ModelAdmin):
+    list_display = ["product", "user", "created_timestamp"]
+    search_fields = ['user',]
+    list_filter = ['created_timestamp',]
+    

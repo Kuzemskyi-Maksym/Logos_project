@@ -3,6 +3,8 @@ from django.db import models
 from django.forms import model_to_dict
 from django.urls import reverse
 from multiselectfield import MultiSelectField
+
+from accounts.models import User
 from . import choises
 
 
@@ -54,10 +56,23 @@ class Products(models.Model):
         return self.price
     
     
-    
-
-
     class Meta:
         db_table = "Product"
         verbose_name = 'Product'
         verbose_name_plural = 'Products'
+
+
+class Comment(models.Model):
+    product = models.ForeignKey(to=Products, related_name='comments', on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    text = models.TextField()
+    created_timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'Comment by {self.user.username} on {self.product.name}'
+    
+    class Meta:
+        db_table: str = "comment"
+        verbose_name = 'Comment'
+        verbose_name_plural = 'Comments'
+
