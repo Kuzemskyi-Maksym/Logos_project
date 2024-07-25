@@ -2,6 +2,7 @@ import re
 from django import forms
 
 class CreateOrderForm(forms.Form):
+     # кастома форма створення замовлення
     first_name = forms.CharField()
     last_name = forms.CharField()
     phone_number = forms.CharField()
@@ -16,6 +17,7 @@ class CreateOrderForm(forms.Form):
         initial='0',
     )
 
+ # Валідація номера телефону
     def clean_phone_number(self):
         data = self.cleaned_data['phone_number']
 

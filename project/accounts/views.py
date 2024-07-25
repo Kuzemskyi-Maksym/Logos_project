@@ -9,6 +9,33 @@ from orders.models import Order, OrderItem
 
 from .forms import SignUpForm, UserLoginForm, ProfileForm
 
+"""
+ **login(request)**: 
+  - Опис: Обробляє вхід користувача.
+  - Ціль: Аутентифікація користувача та перенаправлення на сторінку профілю у разі успіху.
+  - Особливості: Використовує `UserLoginForm` для збору даних про користувача.
+
+- **registration(request)**:
+  - Опис: Обробляє реєстрацію нового користувача.
+  - Ціль: Створення нового облікового запису, аутентифікація та перенаправлення на сторінку профілю.
+  - Особливості: Використовує `SignUpForm` для збору даних про нового користувача.
+
+- **logout(request)**:
+  - Опис: Обробляє вихід користувача.
+  - Ціль: Вихід користувача з системи та перенаправлення на сторінку магазину.
+  - Особливості: Використовує декоратор `login_required` для захисту від неавторизованого доступу.
+
+- **profile(request)**:
+  - Опис: Відображає та редагує профіль користувача.
+  - Ціль: Дозволяє користувачеві переглядати та оновлювати свої дані профілю та замовлення.
+  - Особливості: Використовує `ProfileForm` для збору даних профілю, а також завантажує пов'язані замовлення користувача.
+
+- **users_cart(request)**:
+  - Опис: Відображає кошик користувача.
+  - Ціль: Відображення товарів, доданих користувачем до кошика.
+  - Особливості: Встановлює параметр `site_mobile_menu` для забезпечення мобільного меню на сторінці.
+"""
+
 def login(request):
 
     site_mobile_menu = True
@@ -20,13 +47,9 @@ def login(request):
             password = form.cleaned_data.get('password')
             user = auth.authenticate(username=username, password=password)
 
-            # session_key = request.session.session_key
 
             if user is not None:
                 auth.login(request, user)
-
-                # if session_key:
-                #     Cart.objects.filter(session_key = session_key).update(user=user)
 
                 return HttpResponseRedirect('/accounts/profile')
     else:

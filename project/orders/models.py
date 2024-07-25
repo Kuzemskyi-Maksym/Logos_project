@@ -3,6 +3,28 @@ from django.db import models
 from accounts.models import User
 from main.models import Products
 
+"""
+Модель Order
+user: Зв'язок з моделлю User. Якщо користувача видалять, поле буде встановлене в None за замовчуванням.
+created_timestamp: Дата і час створення замовлення.
+phone_number: Номер телефону покупця.
+requires_delivery: Флаг, що вказує на необхідність доставки.
+delivery_address: Адреса доставки, якщо потрібна доставка.
+payment_on_get: Флаг, що вказує, чи буде оплата при отриманні.
+is_paid: Флаг, що вказує, чи замовлення оплачено.
+status: Статус замовлення, за замовчуванням "In processing".
+Модель OrderItem
+order: Зв'язок з моделлю Order.
+product: Зв'язок з моделлю Products. Якщо продукт видалять, поле буде встановлене в None за замовчуванням.
+name: Назва продукту.
+price: Ціна продукту.
+quantity: Кількість продукту в замовленні.
+created_timestamp: Дата і час додавання товару до замовлення.
+Клас OrderitemQueryset
+total_price: Обчислює загальну ціну всіх товарів в замовленні.
+total_quantity: Обчислює загальну кількість товарів в замовленні.
+"""
+
 class OrderitemQueryset(models.QuerySet):
     def total_price(self):
         return sum(cart.products_price() for cart in self)
