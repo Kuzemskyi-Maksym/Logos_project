@@ -48,7 +48,7 @@
                                     <label for="id_first_name" class="form-label">Name*</label>
                                     <input type="text" class="form-control" id="id_first_name"
                                         name="first_name"
-                                        placeholder="Введите ваше имя"
+                                        placeholder="Enter your name"
                                         value="{{ form.first_name.value }}"
                                         required>
                                         {% if form.first_name.errors %}
@@ -56,10 +56,10 @@
                                         {% endif %}
                                 </div>
                                 <div class="col-md-12 mb-3">
-                                    <label for="id_last_name" class="form-label">Surname*</label>
+                                    <label for="id_last_name" class="form-label">Last Name*</label>
                                     <input type="text" class="form-control" id="id_last_name"
                                         name="last_name"
-                                        placeholder="Введите вашу фамилию"
+                                        placeholder="Enter your last name"
                                         value="{{ form.last_name.value }}"
                                         required>
                                         {% if form.last_name.errors %}
@@ -70,7 +70,7 @@
                                     <label for="id_username" class="form-label">Username*</label>
                                     <input type="text" class="form-control" id="id_username"
                                         name="username"
-                                        placeholder="Введите ваше имя пользователя"
+                                        placeholder="Enter your username"
                                         value="{{ form.username.value }}"
                                         required>
                                         {% if form.username.errors %}
@@ -81,7 +81,7 @@
                                     <label for="id_email" class="form-label">Email*</label>
                                     <input type="email" class="form-control" id="id_email"
                                         name="email"
-                                        placeholder="Введите ваш email *youremail@example.com"
+                                        placeholder="Enter your email *youremail@example.com"
                                         value="{{ form.email.value }}"
                                         required>
                                         {% if form.email.errors %}

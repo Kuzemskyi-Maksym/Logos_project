@@ -61,7 +61,7 @@ def index(request):
     if query_new:
         products = utils.q_search(query_new)
 
-    paginator = Paginator(products, 4)
+    paginator = Paginator(products, 40)
     page_request_variable = "page"
     page = request.GET.get(page_request_variable, 1)
     try:
@@ -114,7 +114,8 @@ def index(request):
 def product_detail(request, product_slug=None):
     instance = get_object_or_404(models.Products, slug=product_slug)
 
-    comments = instance.comments.all()
+    comments = instance.comments.all().order_by('-created_timestamp')
+    average_rating = instance.average_rating()
 
     if request.method == 'POST':
         comment_form = CommentForm(request.POST)
@@ -137,7 +138,8 @@ def product_detail(request, product_slug=None):
         "title": instance.name, 
         "object": instance, 
         'comments': comments,
-        'comment_form': comment_form,
+        'form': comment_form,
+        'average_rating': average_rating,
         }
     
     return render(request, "product_detail.html", context)

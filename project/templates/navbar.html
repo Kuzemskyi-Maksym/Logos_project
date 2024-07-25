@@ -42,7 +42,7 @@
         <div class="col-3 p-0 m-0 h-100" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px; ">
           <img src="{% static 'images/home.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
         </div>
-        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;">Home</div>
+        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;" onclick="location.href='{% url 'main:home' %}'">Home</div>
       </div>
     </div>
     {% comment %} {% endcomment %}
@@ -51,15 +51,15 @@
         <div class="col-3 p-0 m-0 h-100" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
           <img src="{% static 'images/smartphones.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
         </div>
-        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;">Smartphones</div>
+        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;" onclick="location.href='{% url 'accounts:profile' %}'">Account</div>
       </div>
     </div>
     <div class="container px-1 py-1 m-0" style="height: 55px;">
       <div class="row side_menu_block h-100 m-0">
         <div class="col-3 p-0 m-0 h-100" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
-          <img src="{% static 'images/tablet.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
+          <img src="{% static 'images/order-svgrepo-com.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
         </div>
-        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;">Tablets</div>
+        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;" onclick="location.href='{% url 'accounts:profile' %}'">Orders</div>
       </div>
     </div>
     <div class="container px-1 py-1 m-0" style="height: 55px; border-bottom: 2px solid #9c9c9c; ">
@@ -67,7 +67,7 @@
         <div class="col-3 p-0 m-0 h-100" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
           <img src="{% static 'images/laptop.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
         </div>
-        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;">Laptops</div>
+        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;"  onclick="location.href='{% url 'main:home' %}'">Laptops</div>
       </div>
     </div>
     {% comment %} {% endcomment %}
@@ -93,7 +93,7 @@
         <div class="col-3 p-0 m-0 h-100" style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;">
           <img src="{% static 'images/cart_dark.svg' %}" alt="" style="height: 30px; scale: 0.7;" class="mx-auto my-auto w-100 h-100" />
         </div>
-        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;">Shopping Cart</div>
+        <div class="col-9 p-0 m-0 h-100" style="border-top-right-radius: 10px; border-bottom-right-radius: 10px; font-size: 25px; text-align: start; align-content: center;" onclick="location.href='{% url 'accounts:users_cart' %}'">Shopping Cart</div>
       </div>
     </div>
     {% comment %} {% endcomment %}
@@ -156,8 +156,7 @@
     </div>
     <div class="container registered p-0 m-0" style="width: 300px;">
       <div class="row align-items-center registered d-flex justify-content-evenly m-0">
-        <img src="{% static 'images/orders.svg' %}" alt="" title="orders" class="orders p-0 col-2" />
-        <img src="{% static 'images/wishlist.svg' %}" alt="" title="wishlist" class="wishlist p-0 col-2" />
+        <img src="{% static 'images/orders.svg' %}" alt="" title="orders" class="orders p-0 col-2" onclick="location.href='{% url 'accounts:profile' %}'" />
         <img src="{% static 'images/cart.svg' %}" alt="" title="cart" class="cart p-0 col-2" onclick="location.href = '{% url 'accounts:users_cart' %}'" />
         <div class="cartt_index">
           <span class="quantity" style="text-align: center; padding: 0 !important; color: white; font-size: 15px; font-weight: bold; margin-left: -8px !important;">

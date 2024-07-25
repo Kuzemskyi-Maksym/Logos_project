@@ -2,3 +2,37 @@
   color: #f84147;
   font-size: 24px;
 }
+
+.star-rating {
+  width: 20px !important;
+  height: 20px !important;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.buy-button {
+  height: 40px;
+  width: 200px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  
+}
+
+
+.feedback-button {
+  margin-top: 20px;
+  margin-left: 20%;
+  background-color: #3498db; /* Колір фону */
+  color: #fff; /* Колір тексту */
+  border: none; /* Прибираємо стандартний бордюр */
+  border-radius: 5px; /* Заокруглюємо кути */
+  font-size: 15px; /* Розмір шрифту */
+  padding: 10px 20px; /* Відступи всередині кнопки */
+  cursor: pointer; /* Змінюємо курсор миші при наведенні */
+  height: 40px; /* Висота кнопки */
+  width: 200px; /* Ширина кнопки */
+}

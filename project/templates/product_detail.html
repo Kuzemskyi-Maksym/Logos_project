@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load range_tags %}
 
 {% block head_title %}
   {{ title|capfirst }}
@@ -13,48 +14,102 @@
 {% block content %}
   <div class="container mx-0" style="min-width: 100%; max-width: 100%; margin-top: 100px !important;">
     <div class="row">
-      <div class="product-photo col-6">
-        <img src="{{ object.image.url }}" class="card-img-top" alt=" " style="min-width: 700px; max-width: 700px; min-height: 500px;max-height: 500px; border-radius: 10px;" />
+      <div class="product-photo col-6" style="height: 450px !important;">
+        {% if object.image %}
+          <div class="img_container" style="height: 450px !important; width: 700px !important; padding: 0 !important; ">
+            <img src="{{ object.image.url }}" class="card-img-top" alt=" " style="max-width: 100%; height: auto;  object-fit: contain; max-height: 450px;  border-radius: 10px;" />
+          </div>
+        {% else %}
+          <img src="{% static 'images/produc_no_image.png' %}" class="card-img-top" alt=" " style="min-height: 170px;max-height: 170px; border-radius: 10px;" />
+        {% endif %}
+        <div class="comments container" style="margin-top: 40px; width: 700px !important; max-height: 800px !important; overflow-y: scroll;">
+          <h2>Comments</h2>
+          {% for comment in comments %}
+          <div class="comment" style="border: 2px solid gainsboro; border-radius: 5px; margin-bottom: 5px;">
+            <p>By: {{ comment.user.username }}</p>
+            <p>{{ comment.text }}</p>
+            <p>
+              Rating:{% if comment.rating %}
+                {% for i in comment.rating|times %}
+                  <img src="{% static 'images/star.svg' %}" alt="star" class="star-rating" />
+                {% endfor %}
+              {% else %}
+                No rating
+              {% endif %}
+            </p>
+          </div>
+            
+          {% endfor %}
+        </div>
       </div>
       <div class="product-info col-6">
-        <div class="title container" style="font-size: 25px; margin-bottom: 20px; padding-right: 70px !important;">{{ object.name }}</div>
-        <div class="description container" style="font-size: 16px; margin-bottom: 20px; padding-right: 70px !important;">{{ object.description }}</div>
-        <div class="rating container margin-bottom: 20px;">{{ object.rating }}</div>
-        <div class="price container">{{ object.price }}</div>
-        <div class="fef">{{ object.additionally  }}</div>
-      </div>
-      <div class="bucket" style="height: 40px !important; width: 40px !important; z-index: 10000; margin-top: -60px; margin-left: 150px !important;">
-        <a href="{% url 'carts:cart_add' object.slug%}">
-          <img style="height: 40px !important; width: 40px !important;" src="{% static 'images/cart_white.svg' %}" alt="">
-        </a>
+        <div class="title container" style="height: 100px !important; width: 730px !important; overflow: hidden; font-size: 22px; margin-bottom: 20px; padding-right: 70px !important;">{{ object.name }}</div>
+        <div class="description container" style="height: auto;  width: 730px; font-size: 16px; margin-bottom: 20px; padding-right: 70px !important;">
+          <p>{{ object.description }}</p>
+        </div>
+        <div class="rating container margin-bottom: 20px;">
+          <p>
+            {% with avg_rating=average_rating|floatformat:0 %}
+              {% with int_avg_rating=avg_rating|to_int %}
+                {% for i in int_avg_rating|times %}
+                  <img src="{% static 'images/star.svg' %}" alt="star" class="star-rating" />
+                {% endfor %}
+                {% for i in 5|add:'-int_avg_rating'|times %}
+                  <img src="{% static 'images/star_muted.svg' %}" alt="empty star" class="star-rating" />
+                {% endfor %}
+              {% endwith %}
+            {% endwith %}
+          </p>
+        </div>
+        {% if object.discount %}
+          <div class="price_block container" style="margin-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; text-align: left; padding-left: 5px !important;">
+            <div class="price container" style=" font-size: 17px; ">
+              <p>
+                <s>{{ object.price }}</s> ₴
+              </p>
+            </div>
+            <div class="sell_price container" style="margin-top: -17px !important; font-size: 27px;">
+              <p>
+                <strong style="color: red !important;">{{ object.sell_price }} ₴</strong>
+              </p>
+            </div>
+          </div>
+        {% else %}
+          <div class="price_block container" style="margin-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; text-align: left; padding-left: 5px !important;">
+            <div class="price" style=" font-size: 27px; margin-top: 27px !important;">
+              <p>
+                <strong style="color: gray;">{{ object.price }} ₴</strong>
+              </p>
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="bucket" onclick="location.href='{% url 'carts:cart_add' object.slug %}'" style="height: 40px !important; width: 200px !important; z-index: 10000; margin-top: -60px; margin-left: 180px !important;">
+          <button _ngcontent-rz-client-c2877952929="" type="button" class="buy-button button button--with-icon button--green button--medium buy-button--tile ng-star-inserted" aria-label="Купити">
+            <img style="height: 30px !important; width: 30px !important; margin-left: -20px;" src="{% static 'images/cart.svg' %}" alt="" />
+            <span _ngcontent-rz-client-c2877952929="" class="buy-button__label ng-star-inserted">Buy</span><!--  -->
+          </button>
+        </div>
+        <div class="add-coment" style="margin-top: 30px;">
+          <h2>Add a Comment</h2>
+          {% if request.user.is_authenticated %}
+            <form method="POST" action="{% url 'main:product_detail' object.slug %}">
+              {% csrf_token %}
+              <div class="comment row">
+                <div class="text" style="width: 500px !important;">{{ form.text }}</div>
+                <div class="ratingg" style="width: 150px !important; margin-left: 20px; margin-top: 30px;">{{ form.rating }}</div>
+              </div>
+
+              <button class="feedback-button" type="submit">Leave a comment</button>
+            </form>
+          {% else %}
+            <p>You must be logged in to add a comment.</p>
+          {% endif %}
+        </div>
       </div>
     </div>
   </div>
-
-    <h2>Comments</h2>
-      {% for comment in comments %}
-          <div>
-              <p><strong>{{ comment.user.username }}</strong></p>
-              <p>{{ comment.text }}</p>
-              <p><em>{{ comment.created_timestamp }}</em></p>
-          </div>
-      {% endfor %}
-
-      <h2>Add a Comment</h2>
-      {% if request.user.is_authenticated %}
-      <form method="post" action="{% url "main:product_detail" object.slug%}">
-          {% csrf_token %}
-          {{ comment_form.as_p }}
-          <button type="submit">Post Comment</button>
-      </form>
-    {% else %}
-    <p>You must be logged in to add a comment.</p>
-    {% endif %}
-  {% endblock %}
-
-
-
-
+{% endblock %}
 
 {% block js %}
   {{ block.super }}

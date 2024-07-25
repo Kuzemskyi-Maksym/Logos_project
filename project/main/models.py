@@ -55,6 +55,10 @@ class Products(models.Model):
             return round(self.price - (self.price * self.discount / 100), 2)
         return self.price
     
+    def average_rating(self):
+        avg_rating = self.comments.aggregate(models.Avg('rating'))['rating__avg']
+        return avg_rating or 0  # повертає середній рейтинг, або 0, якщо немає рейтингів
+    
     
     class Meta:
         db_table = "Product"
@@ -66,13 +70,13 @@ class Comment(models.Model):
     product = models.ForeignKey(to=Products, related_name='comments', on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     text = models.TextField()
+    rating = models.PositiveIntegerField(default=1, choices=[(i, i) for i in range(1, 6)])
     created_timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'Comment by {self.user.username} on {self.product.name}'
     
     class Meta:
-        db_table: str = "comment"
+        db_table = "comment"
         verbose_name = 'Comment'
         verbose_name_plural = 'Comments'
-

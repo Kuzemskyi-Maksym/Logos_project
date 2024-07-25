@@ -34,8 +34,8 @@ class Order(models.Model):
 class OrderItem(models.Model):
     order = models.ForeignKey(to=Order, on_delete=models.CASCADE)
     product = models.ForeignKey(to=Products, on_delete=models.SET_DEFAULT, null=True, default=None)
-    name = models.CharField(max_length=150)
-    price = models.DecimalField(max_digits=7, decimal_places=2)
+    name = models.CharField(max_length=1000)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.PositiveIntegerField(default=0)
     created_timestamp = models.DateTimeField(auto_now_add=True, verbose_name="Date of sale")
 
