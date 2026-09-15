@@ -106,10 +106,24 @@ WSGI_APPLICATION = "config.wsgi.application"
 dotenv_path = os.path.join(os.path.dirname(__file__), ".env")
 load_dotenv(dotenv_path)
 
+import shutil
+
+# Шлях до задеплоєної бази
+ORIGINAL_DB_PATH = BASE_DIR / "db.sqlite3"
+
+# Якщо ми на Vercel (read-only середовище)
+if os.environ.get("VERCEL"):
+    TMP_DB_PATH = Path("/tmp/db.sqlite3")
+    if not TMP_DB_PATH.exists() and ORIGINAL_DB_PATH.exists():
+        shutil.copyfile(ORIGINAL_DB_PATH, TMP_DB_PATH)
+    DB_PATH = TMP_DB_PATH
+else:
+    DB_PATH = ORIGINAL_DB_PATH
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "NAME": DB_PATH,
     }
 }
 
@@ -173,3 +187,5 @@ INTERNAL_IPS = [
 AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_URL = '/accounts/login/'
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
