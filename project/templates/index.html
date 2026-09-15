@@ -1,0 +1,532 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head_title %}
+  {{ title }}
+{% endblock %}
+
+{% block css %}
+  {{ block.super }}
+  <link href="{% static 'css/index.css' %}" rel="stylesheet" type="text/css" />
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+  <!-- content -->
+  <div class="grid grid-auto-columns align-items-center all">
+    <div class="row all_main">
+       <div class="col-3 filters">
+        <div class="navbar-expand-lg mb-5">
+          <!-- Navbar Toggle -->
+          <div class="d-grid">
+            <button type="button" class="navbar-toggler btn btn-white mb-3" data-bs-toggle="collapse" data-bs-target="#navbarVerticalNavMenuEg2" aria-label="Toggle navigation" aria-expanded="false" aria-controls="navbarVerticalNavMenuEg2">
+              <span class="d-flex justify-content-between align-items-center">
+
+                <span class="navbar-toggler-default"><i class="bi-list"></i></span>
+
+                <span class="navbar-toggler-toggled"><i class="bi-x"></i></span>
+              </span>
+            </button>
+          </div>
+          <!-- End Navbar Toggle -->
+
+          <!-- Navbar Collapse -->
+          <div id="navbarVerticalNavMenuEg2" class="collapse navbar-collapse">
+            <div class="w-100">
+              <!-- Form -->
+              <form>
+
+                <!-- Filter form -->
+                <div class="dropdown mb-2 bg-dark" style="margin-left: -30px; margin-top: -30px; border-radius: 10px;">
+
+                  <form action="{% if request.GET.q %}{% url "main:search" %}{% else %}{% url "main:home" %}{% endif %}" method="get" class="dropdown-menu bg-dark" data-bs-theme="dark">
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="checkbox" name="on_sale" id="flexCheckDefault" value="on" {% if request.GET.on_sale == 'on' %}checked{% endif %}>
+                          {% if request.GET.q %}
+                              <input type="hidden" name="q" value="{{ request.GET.q }}">
+                          {% endif %}
+                          <label class="form-check-label" for="flexCheckDefault">
+                            Promotions
+                          </label>
+                      </div>
+                      <p class=" mx-3 text-white mt-3">Sort:</p>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault1" value="default"
+                          {% if not request.GET.order_by or request.GET.order_by == 'default' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault1">
+                              by Default
+                          </label>
+                      </div>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault2" value="price" 
+                          {% if request.GET.order_by == 'price' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault2">
+                            from cheap to expensive
+                          </label>
+                      </div>
+                      <div class="form-check text-white mx-3">
+                          <input class="form-check-input" type="radio" name="order_by" id="flexRadioDefault3" value="-price"
+                          {% if request.GET.order_by == '-price' %}checked{% endif %}>
+                          <label class="form-check-label" for="flexRadioDefault3">
+                            from expensive to cheap
+                          </label>
+                      </div>
+                      <button style="margin-left: 40% !important; margin-bottom: 10px !important;" type="submit" class="btn btn-primary mx-3 mt-3">Apply</button>
+                  </form>
+              </div> 
+
+
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Producer</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessProducer" class="lessmorebtn btn" onclick="showLessProducers(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreProducer" class="lessmorebtn btn"style="display: none;" onclick="showMoreProducers(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll; max-height: 180px; " id="producerBlock">
+                          {% for producer in producers %}
+                              <div class="form-check producer-item">
+                                  <input style="line-height: .7;" 
+                                  class="form-check-input" 
+                                  type="checkbox" 
+                                  value="{{ producer.0 }}" 
+                                  id="producer{{ producer.0 }}" 
+                                  name="producers" 
+                                  {% if producer.0 in selected_producers %}checked{% endif %}
+                                  data-checked="{% if producer.0 in selected_producers %}true{% else %}false{% endif %}"
+                                  onchange="autofilterProducts_producers(); updateCheckboxState(this)">
+                                  <label style="line-height: .7;"  class="form-check-label" for="producer{{ producer.0 }}">{{ producer.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+              
+                
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Processor</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessProcessor" class="lessmorebtn btn" onclick="showLessProssors(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreProcessor" class="lessmorebtn btn"style="display: none;" onclick="showMoreProcessors(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll;height: 180px !important; max-height: 180px " id="processorBlock">
+                          {% for processor in processors %}
+                              <div class="form-check processor-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ processor.0 }}" 
+                                   id="processor{{ processor.0 }}" 
+                                   name="processors" 
+                                   {% if processor.0 in selected_processors %}checked{% endif %}
+                                   data-checked="{% if processor.0 in selected_processors %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_processors(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="processor{{ processor.0 }}">{{ processor.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Processor Cores</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessProcessor_cores" class="lessmorebtn btn" onclick="showLessProcessor_cores(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreProcessor_cores" class="lessmorebtn btn"style="display: none;" onclick="showMoreProcessor_cores(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll; height: 180px !important; max-height: 180px " id="processor_coresBlock">
+                          {% for processor_core in processor_cores %}
+                              <div class="form-check processor-core-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ processor_core.0 }}" 
+                                   id="processor_core{{ processor_core.0 }}" 
+                                   name="processor_cores" 
+                                   {% if processor_core.0 in selected_processor_cores %}checked{% endif %}
+                                   data-checked="{% if processor_core.0 in selected_processor_cores %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_processorCores(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="processor_core{{ processor_core.0 }}">{{ processor_core.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Screen Coating</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessScreen_coatings" class="lessmorebtn btn" onclick="showLessScreen_coatings(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreScreen_coatings" class="lessmorebtn btn"style="display: none;" onclick="showMoreScreen_coatings(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow: hidden; height: 60px !important; max-height: 60px " id="screen_coatingsBlock">
+                          {% for screen_coating in screen_coatings %}
+                              <div class="form-check screen_coating-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ screen_coating.0 }}" 
+                                   id="screen_coating{{ screen_coating.0 }}" 
+                                   name="screen_coatings" 
+                                   {% if screen_coating.0 in selected_screen_coatings %}checked{% endif %}
+                                   data-checked="{% if screen_coating.0 in selected_screen_coatings %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_ScreenCoatings(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="screen_coating{{ screen_coating.0 }}">{{ screen_coating.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Screen Diagonal</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessScreenDiagonal" class="lessmorebtn btn" onclick="showLessScreen_diagonals(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreScreenDiagonal" class="lessmorebtn btn"style="display: none;" onclick="showMoreScreen_diagonals(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll; height: 180px !important; max-height: 180px " id="screen_diagonalsBlock">
+                          {% for screen_diagonal in screen_diagonals %}
+                              <div class="form-check screen-diagonal-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ screen_diagonal.0 }}" 
+                                   id="screen_diagonal{{ screen_diagonal.0 }}" 
+                                   name="screen_diagonals" 
+                                   {% if screen_diagonal.0 in selected_screen_diagonals %}checked{% endif %}
+                                   data-checked="{% if screen_diagonal.0 in selected_screen_diagonals %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_screenDiagonals(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="screen_diagonal{{ screen_diagonal.0 }}">{{ screen_diagonal.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">Screen Resolution</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessScreenResolution" class="lessmorebtn btn" onclick="showLessScreen_resolutions(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreScreenResolution" class="lessmorebtn btn"style="display: none;" onclick="showMoreScreen_resolutions(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll;height: 180px !important; max-height: 180px " id="screen_resolutionsBlock">
+                          {% for screen_resolution in screen_resolutions %}
+                              <div class="form-check screen-resolution-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ screen_resolution.0 }}" 
+                                   id="screen_resolution{{ screen_resolution.0 }}" 
+                                   name="screen_resolutions" 
+                                   {% if screen_resolution.0 in selected_screen_resolutions %}checked{% endif %}
+                                   data-checked="{% if screen_resolution.0 in selected_screen_resolutions %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_screenResolutions(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="screen_resolution{{ screen_resolution.0 }}">{{ screen_resolution.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">RAM</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessRam" class="lessmorebtn btn" onclick="showLessRams(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreRam" class="lessmorebtn btn"style="display: none;" onclick="showMoreRams(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll;height: 180px !important; max-height: 180px " id="ramsBlock">
+                        {% for ram in rams %}
+                              <div class="form-check ram-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ ram.0 }}" 
+                                   id="ram{{ ram.0 }}" 
+                                   name="rams" 
+                                   {% if ram.0 in selected_rams %}checked{% endif %}
+                                   data-checked="{% if ram.0 in selected_rams %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_rams(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="ram{{ ram.0 }}">{{ ram.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">SSD Scope</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessSsdScope" class="lessmorebtn btn" onclick="showLessSSD_scopes(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreSsdScope" class="lessmorebtn btn"style="display: none;" onclick="showMoreSSD_scopes(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll;height: 180px !important; max-height: 180px " id="ssd_scopesBlock">
+                        {% for ssd_scope in ssd_scopes %}
+                              <div class="form-check ssd-scope-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ ssd_scope.0 }}" 
+                                   id="ssd_scope{{ ssd_scope.0 }}" 
+                                   name="ssd_scopes" 
+                                   {% if ssd_scope.0 in selected_ssd_scopes %}checked{% endif %}
+                                   data-checked="{% if ssd_scope.0 in selected_ssd_scopes %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_ssd_scopes(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="ssd_scope{{ ssd_scope.0 }}">{{ ssd_scope.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+
+                <form method="get" id="filterform">
+                  <div class="border-bottom pb-4 mb-4">
+                    <div class="container">
+                      <div class="row">
+                        <div class="col-8">
+                          <p style="font-size: 20px; color: black;">OS</p>
+                        </div>
+                        <div class="col-2" style="margin-top: -5px !important;">
+                          <div class="arrow_more_less">
+                            <button id="viewLessOs" class="lessmorebtn btn" onclick="showLessOss(event)"><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_less.png' %}" alt=""></button>
+                            <button id="viewMoreOs" class="lessmorebtn btn"style="display: none;" onclick="showMoreOss(event)" ><img style="height: 16px !important; width: 16px !important;" src="{% static 'images/arrow_more.png' %}" alt=""></button>  
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="d-grid gap-2" style="font-size: 15px; overflow-y: scroll; height: 180px !important; max-height: 180px " id="ossBlock">
+                        {% for os in oss %}
+                              <div class="form-check os-item">
+                                  <input 
+                                   class="form-check-input" 
+                                   type="checkbox" 
+                                   value="{{ os.0 }}" 
+                                   id="os{{ os.0 }}" 
+                                   name="oss" 
+                                   {% if os.0 in selected_oss %}checked{% endif %}
+                                   data-checked="{% if os.0 in selected_oss %}true{% else %}false{% endif %}"
+                                   onchange="autofilterProducts_oss(); updateCheckboxState(this)">
+                                  <label class="form-check-label" for="os{{ os.0 }}">{{ os.1 }}</label>
+                              </div>
+                          {% endfor %}
+                      </div>
+                  </div>
+                </form>
+
+                <div class="d-grid">
+                  <button  type="button" id="clearAll" onclick="window.location.href='{% url 'main:home' %}'" class="btn btn-white btn-transition">Clear all</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div> 
+      
+
+
+
+
+      <div class="col-9 main_content">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-md-3">
+                    <div class="card product-card" onclick="location.href='{% url 'main:product_detail' product.slug %}'" style="min-height: 360px; max-height: 360px; height: 360px !important; overflow:hidden; margin-bottom: 10px; padding: 5px; padding-top: 10px; border-radius: 10px;">
+                        {% if product.discount %}
+                            <span class="badge bg-warning text-dark" style="position: absolute; top: 10px !important; right: 5px !important;">Discount {{ product.discount }}%</span>
+                        {% endif %}
+                        {% if product.image %}
+                            <div class="img_container" style="height: 190px !important; width: 243.5px !important; padding: 0 !important; ">
+                                <img src="{{ product.image.url }}" class="card-img-top" alt=" " style="max-width: 100%; height: auto;  object-fit: contain; max-height: 170px;  border-radius: 10px;" />
+                            </div>
+                        {% else %}
+                            <img src="{% static 'images/produc_no_image.png' %}" class="card-img-top" alt=" " style="min-height: 170px;max-height: 170px; border-radius: 10px;" />
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title" data-href="{% url 'main:product_detail' product.slug %}" style="font-size: 13px; padding: 2.5px !important; padding-top: 6px !important; margin-right: -15px !important; margin-left: -15px !important; margin-top: -10px !important; min-height: 25px !important; max-height: 25px !important; height: 25px !important; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; cursor: pointer; font-weight: bolder !important;">{{ product.name|truncatechars:30 }}</h5>
+                            <div class="description" style="cursor: pointer; overflow: hidden; font-size: 12px !important; padding: 2.5px !important; padding-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; margin-top: -10px !important; min-height: 40px !important; max-height: 40px !important; height: 40px !important;">{{ product.description|truncatechars:200 }}</div>
+                            <div class="product_id" style="padding: 2.5px !important; padding-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; min-height: 25px !important; max-height: 25px !important; height: 25px !important;">
+                                <p>id: {{ product.display_id }}</p>
+                            </div>
+                            {% if product.discount %}
+                                <div class="price_block" style="margin-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; text-align: left; padding-left: 5px !important;">
+                                    <div class="price" style=" font-size: 17px; ">
+                                        <p><s>{{ product.price }}</s> ₴</p>
+                                    </div>
+                                    <div class="sell_price" style="margin-top: -17px !important; font-size: 21px;">
+                                        <p><strong style="color: crimson !important;">{{ product.sell_price }} ₴</strong></p>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="price_block" style="margin-top: 3px !important; margin-right: -15px !important; margin-left: -15px !important; text-align: left; padding-left: 5px !important;">
+                                    <div class="price" style=" font-size: 21px; margin-top: 27px !important;">
+                                        <p><strong style="color: gray;">{{ product.price }} ₴</strong></p>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            <div class="bucket" style="height: 40px !important; width: 40px !important; z-index: 10000; margin-top: -60px; margin-left: 150px !important;">
+                                <a href="{% url 'carts:cart_add' product.slug %}">
+                                    <img style="height: 40px !important; width: 40px !important;" src="{% static 'images/cart_white.svg' %}" alt="">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <nav aria-label="Page navigation example" style="margin-top: 40px !important;">
+          <ul class="pagination justify-content-center">
+              {% if products.has_previous %}
+                  <li class="page-item">
+                      <a class="page-link" href="?{{ page_request_variable }}={{ products.previous_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Previous</a>
+                  </li>
+              {% else %}
+                  <li class="page-item disabled">
+                      <span class="page-link">Previous</span>
+                  </li>
+              {% endif %}
+      
+              {% for num in products.paginator.page_range %}
+                  {% if num == 1 %}
+                      <li class="page-item">
+                          <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                      </li>
+                  {% elif num == products.number %}
+                      <li class="page-item active">
+                          <span class="page-link">{{ num }}</span>
+                      </li>
+                  {% elif num == products.paginator.num_pages %}
+                      <li class="page-item">
+                          <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                      </li>
+                  {% elif num > products.number|add:'-3' and num < products.number|add:'3' %}
+                      <li class="page-item">
+                          <a class="page-link" href="?{{ page_request_variable }}={{ num }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">{{ num }}</a>
+                      </li>
+                  {% elif num == products.number|add:'-3' or num == products.number|add:'3' %}
+                      <li class="page-item disabled">
+                          <span class="page-link">...</span>
+                      </li>
+                  {% endif %}
+              {% endfor %}
+      
+              {% if products.has_next %}
+                  <li class="page-item">
+                      <a class="page-link" href="?{{ page_request_variable }}={{ products.next_page_number }}{% if query_params %}&{{ query_params.urlencode }}{% endif %}">Next</a>
+                  </li>
+              {% else %}
+                  <li class="page-item disabled">
+                      <span class="page-link">Next</span>
+                  </li>
+              {% endif %}
+          </ul>
+      </nav>
+    </div>
+    
+
+    
+    
+      
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block js %}
+  {{ block.super }}
+  <script src="{% static 'js/home.js' %}"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+  <script>
+    // Зберегти позицію скролу перед оновленням сторінки
+    window.addEventListener('beforeunload', function() {
+      localStorage.setItem('scrollPosition', window.scrollY);
+    });
+  
+    // Відновити позицію скролу після завантаження сторінки
+    window.addEventListener('load', function() {
+      if (localStorage.getItem('scrollPosition') !== null) {
+        window.scrollTo(0, parseInt(localStorage.getItem('scrollPosition'), 10));
+        localStorage.removeItem('scrollPosition');
+      }
+    });
+  </script>
+{% endblock %}
+
+
